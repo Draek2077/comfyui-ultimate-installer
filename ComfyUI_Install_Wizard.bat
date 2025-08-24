@@ -46,37 +46,44 @@ set "MODEL_01_NAME=FLUX-Dev"
 set "MODEL_01_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"      & set "MODEL_01_OPT_1_FILE=flux1-dev-Q4_K_S.gguf"        & set "MODEL_01_OPT_1_TYPE=gguf_flux"
 set "MODEL_01_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_01_OPT_2_FILE=flux1-dev-Q5_K_S.gguf"        & set "MODEL_01_OPT_2_TYPE=gguf_flux"
 set "MODEL_01_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"      & set "MODEL_01_OPT_3_FILE=flux1-dev-Q8_0.gguf"          & set "MODEL_01_OPT_3_TYPE=gguf_flux"
-set "MODEL_01_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_01_OPT_4_FILE=flux1-dev-fp8.safetensors"        & set "MODEL_01_OPT_4_TYPE=safetensor"
+set "MODEL_01_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_01_OPT_4_FILE=flux1-dev-fp8.safetensors"        & set "MODEL_01_OPT_4_TYPE=safetensor_diff"
 :: Model 2: FLUXSchnell
 set "MODEL_02_NAME=FLUX-Schnell"
 set "MODEL_02_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_02_OPT_1_FILE=flux1-schnell-Q4_K_S.gguf"        & set "MODEL_02_OPT_1_TYPE=gguf"
 set "MODEL_02_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"        & set "MODEL_02_OPT_2_FILE=flux1-schnell-Q5_K_S.gguf"        & set "MODEL_02_OPT_2_TYPE=gguf"
 set "MODEL_02_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_02_OPT_3_FILE=flux1-schnell-Q8_0.gguf"        & set "MODEL_02_OPT_3_TYPE=gguf"
-set "MODEL_02_OPT_4_NAME=FP8    (GGUF, >24GB VRAM)"        & set "MODEL_02_OPT_4_FILE=flux1-schnell-fp8.safetensors"      & set "MODEL_02_OPT_4_TYPE=safetensor"
+set "MODEL_02_OPT_4_NAME=FP8    (GGUF, >24GB VRAM)"        & set "MODEL_02_OPT_4_FILE=flux1-schnell-fp8.safetensors"      & set "MODEL_02_OPT_4_TYPE=safetensor_diff"
 :: Model 3: FLUX Kontext
 set "MODEL_03_NAME=FLUX-Kontext"
 set "MODEL_03_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"      & set "MODEL_03_OPT_1_FILE=flux1-kontext-dev-Q4_K_S.gguf"  & set "MODEL_03_OPT_1_TYPE=gguf"
 set "MODEL_03_OPT_2_NAME=Q5_K_S (GGUF, 12-24GB VRAM)"      & set "MODEL_03_OPT_2_FILE=flux1-kontext-dev-Q5_K_S.gguf"  & set "MODEL_03_OPT_2_TYPE=gguf"
 set "MODEL_03_OPT_3_NAME=Q8_0   (GGUF, >24GB VRAM)"      & set "MODEL_03_OPT_3_FILE=flux1-kontext-dev-Q8_0.gguf"    & set "MODEL_03_OPT_3_TYPE=gguf"
 set "MODEL_03_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_03_OPT_4_FILE=flux1-kontext-dev-fp8-e4m3fn.safetensors"      & set "MODEL_03_OPT_4_TYPE=safetensor_diff"
-:: Model 4: Qwen
-set "MODEL_04_NAME=Qwen"
+:: Model 4: Qwen Image
+set "MODEL_04_NAME=Qwen-Image"
 set "MODEL_04_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"      & set "MODEL_04_OPT_1_FILE=Qwen_Image_Distill-Q4_K_S.gguf"  & set "MODEL_04_OPT_1_TYPE=gguf"
 set "MODEL_04_OPT_2_NAME=Q5_K_S (GGUF, 12-24GB VRAM)"      & set "MODEL_04_OPT_2_FILE=Qwen_Image_Distill-Q5_K_S.gguf"  & set "MODEL_04_OPT_2_TYPE=gguf"
 set "MODEL_04_OPT_3_NAME=Q8_0   (GGUF, >24GB VRAM)"      & set "MODEL_04_OPT_3_FILE=Qwen_Image_Distill-Q8_0.gguf"    & set "MODEL_04_OPT_3_TYPE=gguf"
-:: Model 5: HiDream
-set "MODEL_05_NAME=HiDream"
-set "MODEL_05_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"      & set "MODEL_05_OPT_1_FILE=hidream-i1-dev-Q4_K_S.gguf"      & set "MODEL_05_OPT_1_TYPE=gguf"
-set "MODEL_05_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_05_OPT_2_FILE=hidream-i1-dev-Q5_K_S.gguf"      & set "MODEL_05_OPT_2_TYPE=gguf"
-set "MODEL_05_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"      & set "MODEL_05_OPT_3_FILE=hidream-i1-dev-Q8_0.gguf"        & set "MODEL_05_OPT_3_TYPE=gguf"
-set "MODEL_05_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_05_OPT_4_FILE=hidream_i1_dev_fp8.safetensors" & set "MODEL_05_OPT_4_TYPE=safetensor_diff"
+set "MODEL_04_OPT_4_NAME=FP8 (Safetensor, >24GB VRAM)" & set "MODEL_04_OPT_4_FILE=qwen_image_fp8_e4m3fn.safetensors" & set "MODEL_04_OPT_4_TYPE=safetensor_diff" & set "MODEL_04_OPT_4_URL=https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_fp8_e4m3fn.safetensors?download=true"
+:: Model 5: Qwen Edit
+set "MODEL_05_NAME=Qwen-Edit"
+set "MODEL_05_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"      & set "MODEL_05_OPT_1_FILE=Qwen_Image_Edit-Q4_K_S.gguf"  & set "MODEL_05_OPT_1_TYPE=gguf"
+set "MODEL_05_OPT_2_NAME=Q5_K_S (GGUF, 12-24GB VRAM)"      & set "MODEL_05_OPT_2_FILE=Qwen_Image_Edit-Q5_K_S.gguf"  & set "MODEL_05_OPT_2_TYPE=gguf"
+set "MODEL_05_OPT_3_NAME=Q8_0   (GGUF, >24GB VRAM)"      & set "MODEL_05_OPT_3_FILE=Qwen_Image_Edit-Q8_0.gguf"    & set "MODEL_05_OPT_3_TYPE=gguf"
+set "MODEL_05_OPT_4_NAME=FP8 (Safetensor, >24GB VRAM)" & set "MODEL_05_OPT_4_FILE=qwen_image_edit_fp8_e4m3fn.safetensors" & set "MODEL_05_OPT_4_TYPE=safetensor_diff" & set "MODEL_04_OPT_4_URL=https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/resolve/main/split_files/diffusion_models/qwen_image_edit_fp8_e4m3fn.safetensors?download=true"
+:: Model 6: HiDream
+set "MODEL_06_NAME=HiDream"
+set "MODEL_06_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"      & set "MODEL_06_OPT_1_FILE=hidream-i1-dev-Q4_K_S.gguf"      & set "MODEL_06_OPT_1_TYPE=gguf"
+set "MODEL_06_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_06_OPT_2_FILE=hidream-i1-dev-Q5_K_S.gguf"      & set "MODEL_06_OPT_2_TYPE=gguf"
+set "MODEL_06_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"      & set "MODEL_06_OPT_3_FILE=hidream-i1-dev-Q8_0.gguf"        & set "MODEL_06_OPT_3_TYPE=gguf"
+set "MODEL_06_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_06_OPT_4_FILE=hidream_i1_dev_fp8.safetensors" & set "MODEL_06_OPT_4_TYPE=safetensor_diff"
 :: Model 7: SDXL
 set "MODEL_07_NAME=SDXL"
-set "MODEL_07_OPT_1_NAME=Base (Safetensor, 12GB VRAM)"      & set "MODEL_07_OPT_1_FILE=sd_xl_base_1.0_0.9vae.safetensors"                             & set "MODEL_07_OPT_1_TYPE=safetensor"
+set "MODEL_07_OPT_1_NAME=Base (Safetensor, 12GB VRAM)"      & set "MODEL_07_OPT_1_FILE=sd_xl_base_1.0_0.9vae.safetensors" & set "MODEL_07_OPT_1_TYPE=safetensor"
 :: Model 8: SD3
 set "MODEL_08_NAME=SD3"
-set "MODEL_08_OPT_1_NAME=Medium 2B (Safetensor, 6-8GB VRAM)"      & set "MODEL_08_OPT_1_FILE=sd3.5_medium.safetensors"                              & set "MODEL_08_OPT_1_TYPE=safetensor"
-set "MODEL_08_OPT_2_NAME=Large 8B  (Safetensor, 16-24GB VRAM)"      & set "MODEL_08_OPT_2_FILE=sd3.5_large.safetensors"                               & set "MODEL_08_OPT_2_TYPE=safetensor"
+set "MODEL_08_OPT_1_NAME=Medium 2B (Safetensor, 6-8GB VRAM)"      & set "MODEL_08_OPT_1_FILE=sd3.5_medium.safetensors" & set "MODEL_08_OPT_1_TYPE=safetensor"
+set "MODEL_08_OPT_2_NAME=Large 8B  (Safetensor, 16-24GB VRAM)"      & set "MODEL_08_OPT_2_FILE=sd3.5_large.safetensors" & set "MODEL_08_OPT_2_TYPE=safetensor"
 :: Model 9: WAN2.1T2V
 set "MODEL_09_NAME=WAN2.1-T2V"
 set "MODEL_09_OPT_1_NAME=Q4_K_S (GGUF)"                 & set "MODEL_09_OPT_1_FILE=wan2.1-t2v-14b-Q4_K_S.gguf" & set "MODEL_09_OPT_1_TYPE=gguf"
@@ -604,7 +611,7 @@ echo %YELLOW%This will take a while. Please be patient...%RESET%
 echo.
 
 :: ============================================================================
-:: NEW: Section to set flags based on selected model families
+:: Section to set flags based on selected model families
 :: ============================================================================
 echo %BLUE%--- Checking which model families were selected... ---%RESET%
 :: Initialize flags
@@ -650,24 +657,34 @@ for /l %%G in (1,1,99) do (
                 call set "MODEL_NAME=%%MODEL_!num!_NAME%%"
                 call set "FILENAME=%%MODEL_!num!_OPT_%%I_FILE%%"
                 call set "FILETYPE=%%MODEL_!num!_OPT_%%I_TYPE%%"
+                call set "CUSTOM_URL=%%MODEL_!num!_OPT_%%I_URL%%"
+
+                set "DOWNLOAD_URL="
+                if defined CUSTOM_URL (
+                    set "DOWNLOAD_URL=!CUSTOM_URL!"
+                ) else (
+                    set "DOWNLOAD_URL=%HF_FLX_URL%/!FILENAME!"
+                )
+
                 echo Downloading !MODEL_NAME! (!FILENAME!^)...
+
                 if "!FILETYPE!"=="gguf" (
-                    call :grab "unet\!FILENAME!" "%HF_FLX_URL%/!FILENAME!?download=true"
+                    call :grab "unet\!FILENAME!" "!DOWNLOAD_URL!?download=true"
                 )
                 if "!FILETYPE!"=="gguf_flux" (
-                    call :grab "unet\!FILENAME!" "%HF_FLX_URL%/!FILENAME!?download=true"
+                    call :grab "unet\!FILENAME!" "!DOWNLOAD_URL!?download=true"
                     rem Also grab the associated text encoder for Flux models
                     call set "FLUX_ENCODER=%%MODEL_01_OPT_%%I_ENC%%"
                     if defined FLUX_ENCODER call :grab "clip\t5-v1_1-xxl-encoder-!FLUX_ENCODER!.gguf" "%HF_FLX_URL%/t5-v1_1-xxl-encoder-!FLUX_ENCODER!.gguf?download=true"
                 )
                 if "!FILETYPE!"=="safetensor" (
-                    call :grab "checkpoints\!FILENAME!" "%HF_FLX_URL%/!FILENAME!"
+                    call :grab "checkpoints\!FILENAME!" "!DOWNLOAD_URL!"
                 )
                 if "!FILETYPE!"=="safetensor_diff" (
-                    call :grab "diffusion_models\!FILENAME!" "%HF_FLX_URL%/!FILENAME!"
+                    call :grab "diffusion_models\!FILENAME!" "!DOWNLOAD_URL!"
                 )
                  if "!FILETYPE!"=="lora" (
-                    call :grab "loras\!FILENAME!" "%HF_FLX_URL%/!FILENAME!"
+                    call :grab "loras\!FILENAME!" "!DOWNLOAD_URL!"
                 )
             )
         )
@@ -689,15 +706,28 @@ if defined FLAG_FLUX_SELECTED (
     call :grab "diffusion_models\svdq-fp4_r32-flux.1-kontext-dev.safetensors" "%HF_FLX_URL%/svdq-fp4_r32-flux.1-kontext-dev.safetensors?download=true"
     call :grab "diffusion_models\svdq-int4_r32-flux.1-kontext-dev.safetensors" "%HF_FLX_URL%/svdq-int4_r32-flux.1-kontext-dev.safetensors?download=true"
     call :grab "text_encoders\umt5-xxl-encoder-Q5_K_S.gguf" "%HF_FLX_URL%/umt5-xxl-encoder-Q5_K_S.gguf?download=true"
+    call :grab "text_encoders\t5xxl_fp16.safetensors" "%HF_FLX_URL%/t5xxl_fp16.safetensors?download=true"
+    call :grab "text_encoders\t5xxl_fp8_e4m3fn.safetensors" "%HF_FLX_URL%/t5xxl_fp8_e4m3fn.safetensors?download=true"
     call :grab "text_encoders\t5xxl_fp8_e4m3fn_scaled.safetensors" "%HF_FLX_URL%/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true"
     call :grab "pulid\pulid_flux_v0.9.0.safetensors" "%HF_FLX_URL%/pulid_flux_v0.9.0.safetensors?download=true"
-    call :grab "controlnet\Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors" "%HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true"
+    call :grab "controlnet\FLUX1-dev-ControlNet-Union-Pro.safetensors" "%HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true"
+    call :grab "controlnet\FLUX1-dev-ControlNet-Depth.safetensors" "https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Depth/resolve/main/diffusion_pytorch_model.safetensors?download=true"
+    call :grab "xlabs\ipadapters\ip_adapter.safetensors" "https://huggingface.co/XLabs-AI/flux-ip-adapter-v2/resolve/main/ip_adapter.safetensors?download=true"
+    call :grab "xlabs\controlnets\flux-canny-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-canny-v3/resolve/main/flux-canny-controlnet-v3.safetensors?download=true"
+    call :grab "xlabs\controlnets\flux-depth-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-depth-v3/resolve/main/flux-depth-controlnet-v3.safetensors?download=true"
+    call :grab "xlabs\controlnets\flux-hed-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true"
+    call :grab "clip_vision\model.safetensors" "https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true"
+    call :grab "style_models\flux1-redux-dev.safetensors" "https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true"
 )
 
 :: --- Qwen Models ---
 if defined FLAG_QWEN_SELECTED (
     echo. & echo %YELLOW%--- Downloading supporting files for Qwen...%RESET%
     call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf?download=true"
+    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true"
+    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf?download=true"
+    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf?download=true"
+    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf?download=true"
     call :grab "vae\qwen_image_vae.safetensors" "%HF_FLX_URL%/qwen_image_vae.safetensors?download=true"
 )
 
@@ -718,6 +748,12 @@ if defined FLAG_SD3_SELECTED (
 if defined FLAG_SDXL_SELECTED (
     echo. & echo %YELLOW%--- Downloading supporting files for SDXL...%RESET%
     call :grab "vae\sdxl_vae.safetensors" "https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors?download=true"
+    call :grab "diffusion_models\sd_xl_refiner_1.0_0.9vae.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0_0.9vae.safetensors?download=true"
+    call :grab "controlnet\controlnet-union-sdxl-1.0.safetensors" "https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors?download=true"
+    call :grab "controlnet\controlnet-union-sdxl-1.0.safetensors" "https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors?download=true"
+    call :grab "controlnet\diffusers_xl_canny_full.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors?download=true"
+    call :grab "controlnet\diffusers_xl_depth_full.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_full.safetensors?download=true"
+    call :grab "controlnet\thibaud_xl_openpose.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/thibaud_xl_openpose.safetensors?download=true"
 )
 
 :: --- WAN 2.1 Models ---
@@ -726,6 +762,7 @@ if defined FLAG_WAN21_SELECTED (
     call :grab "vae\wan_2.1_vae.safetensors" "%HF_FLX_URL%/wan_2.1_vae.safetensors?download=true"
     call :grab "loras\Wan2.1_T2V_14B_FusionX_LoRA.safetensors" "%HF_FLX_URL%/Wan2.1_T2V_14B_FusionX_LoRA.safetensors?download=true"
     call :grab "loras\Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors" "%HF_FLX_URL%/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors?download=true"
+	call :grab "vae\ae.safetensors" "%HF_FLX_URL%/ae.safetensors?download=true"
 )
 
 :: --- WAN 2.2 Models ---
@@ -740,12 +777,21 @@ if defined FLAG_WAN22_SELECTED (
 
 echo. & echo %YELLOW%--- Downloading general purpose models & tools (Upscalers, etc.)...%RESET%
 call :grab "upscale_models\4x-ClearRealityV1.pth" "%HF_FLX_URL%/4x-ClearRealityV1.pth?download=true"
+call :grab "upscale_models\4x-UltraSharp.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-UltraSharp.pth?download=true"
+call :grab "upscale_models\RealESRGAN_x2.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth?download=true"
+call :grab "upscale_models\RealESRGAN_x4.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true"
+call :grab "upscale_models\RealESRGAN_x8.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true"
 call :grab "upscale_models\RealESRGAN_x4plus_anime_6B.pth" "%HF_FLX_URL%/RealESRGAN_x4plus_anime_6B.pth?download=true"
+call :grab "upscale_models\4x_NMKD-Siax_200k.pth" "https://huggingface.co/uwg/upscaler/blob/main/ESRGAN/4x_NMKD-Siax_200k.pth"
+call :grab "upscale_models\4x_foolhardy_Remacri.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_foolhardy_Remacri.pth?download=true"
+call :grab "upscale_models\4x_NMKD-Superscale-SP_178000_G.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Superscale-SP_178000_G.pth?download=true"
+call :grab "upscale_models\4xNomos8kDAT.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4xNomos8kDAT.pth?download=true"
 call :grab "sams\sam_vit_b_01ec64.pth" "%HF_FLX_URL%/sam_vit_b_01ec64.pth?download=true"
-call :grab "ultralytics\face_yolov8n.pt" "%HF_FLX_URL%/face_yolov8n.pt?download=true"
+call :grab "ultralytics\bbox\hand_yolov8s.pt" "https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/hand_yolov8s.pt?download=true"
+call :grab "ultralytics\bbox\face_yolov8m.pt" "https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/face_yolov8m.pt?download=true"
+call :grab "ultralytics\segm\person_yolov8m-seg.pt" "https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/segm/person_yolov8m-seg.pt?download=true"
 call :grab "text_encoders\llama_3.1_8b_instruct_fp8_scaled.safetensors" "%HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true"
 call :grab "clip_vision\sigclip_vision_patch14_384.safetensors" "%HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true"
-call :grab "vae\ae.safetensors" "%HF_FLX_URL%/ae.safetensors?download=true"
 call :grab "clip\ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" "%HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true"
 call :grab "clip\clip_l.safetensors" "%HF_FLX_URL%/clip_l.safetensors?download=true"
 
@@ -753,8 +799,6 @@ echo. & echo %YELLOW%--- Cloning Repo-based Models (InsightFace, Florence, etc.)
 if not exist "insightface" git clone %HF_BASE_URL%/insightface
 if not exist "LLM\Florence-2-base" git clone %HF_BASE_URL%/Florence-2-base LLM\Florence-2-base
 if not exist "LLM\Florence-2-large" git clone %HF_BASE_URL%/Florence-2-large LLM\Florence-2-large
-if not exist "ultralytics\bbox" git clone %HF_BASE_URL%/bbox ultralytics\bbox
-if not exist "ultralytics\segm" git clone %HF_BASE_URL%/segm ultralytics\segm
 if not exist "vae_approx\taesd_decoder.pth" git clone https://github.com/madebyollin/taesd.git vae_approx
 goto :eof
 
