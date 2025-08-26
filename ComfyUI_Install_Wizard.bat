@@ -53,22 +53,22 @@ set "MODEL_01_NAME=FLUX-Dev"
 set "MODEL_01_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"       & set "MODEL_01_OPT_1_FILE=flux1-dev-Q4_K_S.gguf"     & set "MODEL_01_OPT_1_TYPE=gguf_flux"
 set "MODEL_01_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"     & set "MODEL_01_OPT_2_FILE=flux1-dev-Q5_K_S.gguf"     & set "MODEL_01_OPT_2_TYPE=gguf_flux"
 set "MODEL_01_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"       & set "MODEL_01_OPT_3_FILE=flux1-dev-Q8_0.gguf"       & set "MODEL_01_OPT_3_TYPE=gguf_flux"
-set "MODEL_01_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_01_OPT_4_FILE=flux1-dev-fp8.safetensors" & set "MODEL_01_OPT_4_TYPE=checkpoint"
-set "MODEL_01_OPT_5_NAME=FP16   (Safetensor, >32GB VRAM)" & set "MODEL_01_OPT_5_FILE=flux1-dev.sft"             & set "MODEL_01_OPT_5_TYPE=checkpoint"
+set "MODEL_01_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_01_OPT_4_FILE=flux1-dev-fp8.safetensors" & set "MODEL_01_OPT_4_TYPE=diffusion_model"
+set "MODEL_01_OPT_5_NAME=FP16   (Safetensor, >32GB VRAM)" & set "MODEL_01_OPT_5_FILE=flux1-dev.sft"             & set "MODEL_01_OPT_5_TYPE=diffusion_model"
 :: Model 2: FLUXSchnell
 set "MODEL_02_NAME=FLUX-Schnell"
 set "MODEL_02_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_02_OPT_1_FILE=flux1-schnell-Q4_K_S.gguf"     & set "MODEL_02_OPT_1_TYPE=gguf"
 set "MODEL_02_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_02_OPT_2_FILE=flux1-schnell-Q5_K_S.gguf"     & set "MODEL_02_OPT_2_TYPE=gguf"
 set "MODEL_02_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_02_OPT_3_FILE=flux1-schnell-Q8_0.gguf"       & set "MODEL_02_OPT_3_TYPE=gguf"
-set "MODEL_02_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_02_OPT_4_FILE=flux1-schnell-fp8.safetensors" & set "MODEL_02_OPT_4_TYPE=checkpoint"
-set "MODEL_02_OPT_5_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_02_OPT_5_FILE=flux1-schnell.safetensors"     & set "MODEL_02_OPT_5_TYPE=checkpoint" & set "MODEL_02_OPT_5_URL=https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/flux1-schnell.safetensors?download=true"
+set "MODEL_02_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_02_OPT_4_FILE=flux1-schnell-fp8.safetensors" & set "MODEL_02_OPT_4_TYPE=diffusion_model"
+set "MODEL_02_OPT_5_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_02_OPT_5_FILE=flux1-schnell.safetensors"     & set "MODEL_02_OPT_5_TYPE=diffusion_model" & set "MODEL_02_OPT_5_URL=https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/flux1-schnell.safetensors?download=true"
 :: Model 3: FLUX Kontext
 set "MODEL_03_NAME=FLUX-Kontext"
 set "MODEL_03_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"       & set "MODEL_03_OPT_1_FILE=flux1-kontext-dev-Q4_K_S.gguf"            & set "MODEL_03_OPT_1_TYPE=gguf"
 set "MODEL_03_OPT_2_NAME=Q5_K_S (GGUF, 12-24GB VRAM)"     & set "MODEL_03_OPT_2_FILE=flux1-kontext-dev-Q5_K_S.gguf"            & set "MODEL_03_OPT_2_TYPE=gguf"
 set "MODEL_03_OPT_3_NAME=Q8_0   (GGUF, >24GB VRAM)"       & set "MODEL_03_OPT_3_FILE=flux1-kontext-dev-Q8_0.gguf"              & set "MODEL_03_OPT_3_TYPE=gguf"
-set "MODEL_03_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_03_OPT_4_FILE=flux1-kontext-dev-fp8-e4m3fn.safetensors" & set "MODEL_03_OPT_4_TYPE=checkpoint"
-set "MODEL_03_OPT_5_NAME=FP16   (Safetensor, >32GB VRAM)" & set "MODEL_03_OPT_5_FILE=flux1-kontext-dev.safetensors"            & set "MODEL_03_OPT_5_TYPE=checkpoint" & set "MODEL_03_OPT_5_URL=https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev/resolve/main/flux1-kontext-dev.safetensors?download=true"
+set "MODEL_03_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_03_OPT_4_FILE=flux1-kontext-dev-fp8-e4m3fn.safetensors" & set "MODEL_03_OPT_4_TYPE=diffusion_model"
+set "MODEL_03_OPT_5_NAME=FP16   (Safetensor, >32GB VRAM)" & set "MODEL_03_OPT_5_FILE=flux1-kontext-dev.safetensors"            & set "MODEL_03_OPT_5_TYPE=diffusion_model" & set "MODEL_03_OPT_5_URL=https://huggingface.co/black-forest-labs/FLUX.1-Kontext-dev/resolve/main/flux1-kontext-dev.safetensors?download=true"
 :: Model 4: Qwen Image
 set "MODEL_04_NAME=Qwen-Image"
 set "MODEL_04_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"       & set "MODEL_04_OPT_1_FILE=Qwen_Image_Distill-Q4_K_S.gguf"    & set "MODEL_04_OPT_1_TYPE=gguf"
@@ -767,7 +767,7 @@ if defined FLAG_FLUX_SELECTED (
     call :grab "text_encoders\t5xxl_fp16.safetensors" "%HF_FLX_URL%/t5xxl_fp16.safetensors?download=true"
     call :grab "text_encoders\t5xxl_fp8_e4m3fn.safetensors" "%HF_FLX_URL%/t5xxl_fp8_e4m3fn.safetensors?download=true"
     call :grab "text_encoders\t5xxl_fp8_e4m3fn_scaled.safetensors" "%HF_FLX_URL%/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true"
-    call :grab "pulid\pulid_flux_v0.9.0.safetensors" "%HF_FLX_URL%/pulid_flux_v0.9.0.safetensors?download=true"
+    call :grab "pulid\pulid_flux_v0.9.1.safetensors" "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors?download=true"
     call :grab "controlnet\FLUX1-dev-ControlNet-Union-Pro.safetensors" "%HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true"
     call :grab "controlnet\FLUX1-dev-ControlNet-Depth.safetensors" "https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Depth/resolve/main/diffusion_pytorch_model.safetensors?download=true"
     call :grab "xlabs\ipadapters\ip_adapter.safetensors" "https://huggingface.co/XLabs-AI/flux-ip-adapter-v2/resolve/main/ip_adapter.safetensors?download=true"
@@ -776,6 +776,9 @@ if defined FLAG_FLUX_SELECTED (
     call :grab "xlabs\controlnets\flux-hed-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true"
     call :grab "clip_vision\model.safetensors" "https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true"
     call :grab "style_models\flux1-redux-dev.safetensors" "https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true"
+    call :grab "diffusion_models\flux1-fill-dev.safetensors" "https://huggingface.co/black-forest-labs/FLUX.1-Fill-dev/blob/main/flux1-fill-dev.safetensors?download=true"
+    call :grab "vae_approx\taef1_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taef1_decoder.pth"
+    call :grab "vae_approx\taef1_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taef1_encoder.pth"
 )
 
 :: --- Qwen Models ---
@@ -801,6 +804,11 @@ if defined FLAG_HIDREAM_SELECTED (
 :: --- SD3 Models ---
 if defined FLAG_SD3_SELECTED (
     echo %YELLOW%--- Downloading supporting files for SD3...%RESET%
+    call :grab "text_encoders\clip_g.safetensors" "https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_g.safetensors?download=true"
+    call :grab "text_encoders\clip_l.safetensors" "https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_l.safetensors?download=true"
+    call :grab "vae\sd35_vae.safetensors" "https://civitai.com/api/download/models/985137?type=Model&format=SafeTensor"
+    call :grab "vae_approx\taesd3_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd3_decoder.pth"
+    call :grab "vae_approx\taesd3_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd3_encoder.pth"
 )
 
 :: --- SDXL Models ---
@@ -812,6 +820,8 @@ if defined FLAG_SDXL_SELECTED (
     call :grab "controlnet\diffusers_xl_canny_full.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors?download=true"
     call :grab "controlnet\diffusers_xl_depth_full.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_full.safetensors?download=true"
     call :grab "controlnet\thibaud_xl_openpose.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/thibaud_xl_openpose.safetensors?download=true"
+    call :grab "vae_approx\taesdxl_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth"
+    call :grab "vae_approx\taesdxl_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth"
 )
 
 :: --- WAN 2.1 Models ---
@@ -834,9 +844,10 @@ if defined FLAG_WAN22_SELECTED (
 )
 
 echo.
-echo %YELLOW%--- Downloading general purpose models & tools (Upscalers, etc.)...%RESET%
+echo %YELLOW%--- Downloading general purpose models ^& tools (Upscalers, etc.)...%RESET%
 call :grab "upscale_models\4x-ClearRealityV1.pth" "%HF_FLX_URL%/4x-ClearRealityV1.pth?download=true"
 call :grab "upscale_models\4x-UltraSharp.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-UltraSharp.pth?download=true"
+call :grab "upscale_models\ESRGAN_4x.pth" "https://huggingface.co/Afizi/ESRGAN_4x.pth/resolve/main/ESRGAN_4x.pth?download=true"
 call :grab "upscale_models\RealESRGAN_x2.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth?download=true"
 call :grab "upscale_models\RealESRGAN_x4.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true"
 call :grab "upscale_models\RealESRGAN_x8.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true"
@@ -853,13 +864,15 @@ call :grab "text_encoders\llama_3.1_8b_instruct_fp8_scaled.safetensors" "%HF_FLX
 call :grab "clip_vision\sigclip_vision_patch14_384.safetensors" "%HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true"
 call :grab "clip\ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" "%HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true"
 call :grab "clip\clip_l.safetensors" "%HF_FLX_URL%/clip_l.safetensors?download=true"
+call :grab "vae_approx\taesd_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth"
+call :grab "vae_approx\taesd_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth"
 
 echo.
 echo %YELLOW%--- Cloning Repo-based Models (InsightFace, Florence, etc.)...%RESET%
 if not exist "insightface" git clone %HF_BASE_URL%/insightface
 if not exist "LLM\Florence-2-base" git clone %HF_BASE_URL%/Florence-2-base LLM\Florence-2-base
 if not exist "LLM\Florence-2-large" git clone %HF_BASE_URL%/Florence-2-large LLM\Florence-2-large
-if not exist "vae_approx\taesd_decoder.pth" git clone https://github.com/madebyollin/taesd.git vae_approx
+
 goto :eof
 
 :: --- Triton and Sage Attention Installation ---
@@ -903,7 +916,7 @@ echo.
 echo %YELLOW%Applying '--use-sage-attention' flag to run scripts...%RESET%
 call :update_run_scripts
 echo.
-set "LAST_ACTION_MSG=%GREEN%Triton & Sage Attention installed and enabled.%RESET%"
+set "LAST_ACTION_MSG=%GREEN%Triton and Sage Attention installed and enabled.%RESET%"
 goto :main_menu_return
 
 
