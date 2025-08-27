@@ -8,6 +8,8 @@ This installer aims to allow the installation of ComfyUI for NVIDIA on Windows (
 
 I use the installation of ComfyUI 0.3.49 and then automatically upgrades from there. This ensures a Python 3.12 environment and a full compatibility with all the nodes I install. It adds several customizations to initial ComfyUI configuration, as well as a convenient ComfyUI frontend launcher for the start menu. The ComfyUI Server Manager project is also installed automatically if requested in the install process, and it will provide an easy to use tray interface to run and manage the ComfyUI Server in Windows environments.
 
+The project was written entirely using Gemini 2.5 Pro.
+
 _If you are interested in ComfyUI please visit:_
 
 https://github.com/comfyanonymous/ComfyUI
