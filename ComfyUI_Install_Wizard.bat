@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.0 (Cleaned Release)
+:: Version: 2.1 (Server Manager Integration)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -29,6 +29,9 @@ set "RED=!ESC![91m"
 :: --- Last Action Message Initialization ---
 set "LAST_ACTION_MSG=!GREEN!Welcome, please select an option to begin.!RESET!"
 
+:: --- Toggles Options ---
+set "INSTALL_SERVER_MANAGER=0" :: Set to 1 to install, 0 to skip
+
 :: --- Core Configuration ---
 set "COMFYUI_DIR=ComfyUI_windows_portable"
 set "CUSTOM_NODES_DIR=%COMFYUI_DIR%\ComfyUI\custom_nodes"
@@ -42,11 +45,13 @@ set "SEVEN_VER=22.01"
 set "COMFY_RELEASE_URL=https://github.com/comfyanonymous/ComfyUI/releases/download/v%COMFY_VER%/ComfyUI_windows_portable_nvidia.7z"
 set "HF_BASE_URL=https://huggingface.co/Aitrepreneur"
 set "HF_FLX_URL=%HF_BASE_URL%/FLX/resolve/main"
+set "SERVER_MANAGER_URL=https://github.com/Draek2077/ComfyUI-Server-Manager/releases/download/v1.0/ComfyUIServerManagerInstaller.msi"
+set "SERVER_MANAGER_MSI_NAME=ComfyUIServerManagerInstaller.msi"
 
 :: --- Model Catalog Configuration ---
 :: To add/change models, edit this section. The menus will update automatically.
 :: ---
-:: For each option, define NAME, FILE (the actual filename), and TYPE (gguf or safetensor)
+:: For each option, define NAME, FILE (the actual filename), and TYPE (gguf or safetensor), and URL (opt) if separate source
 :: ---
 :: Model 1: FLUXDev
 set "MODEL_01_NAME=FLUX-Dev"
@@ -90,85 +95,90 @@ set "MODEL_06_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"     & set "MODEL_06_OPT_2_
 set "MODEL_06_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"       & set "MODEL_06_OPT_3_FILE=hidream-i1-dev-Q8_0.gguf"        & set "MODEL_06_OPT_3_TYPE=gguf"
 set "MODEL_06_OPT_4_NAME=FP8    (Safetensor, >24GB VRAM)" & set "MODEL_06_OPT_4_FILE=hidream_i1_dev_fp8.safetensors"  & set "MODEL_06_OPT_4_TYPE=diffusion_model"
 set "MODEL_06_OPT_5_NAME=BF16   (Safetensor, >32GB VRAM)" & set "MODEL_06_OPT_5_FILE=hidream_i1_dev_bf16.safetensors" & set "MODEL_06_OPT_5_TYPE=diffusion_model" & set "MODEL_06_OPT_5_URL=https://huggingface.co/Comfy-Org/HiDream-I1_ComfyUI/resolve/main/split_files/diffusion_models/hidream_i1_dev_bf16.safetensors?download=true"
-:: Model 7: SDXL
-set "MODEL_07_NAME=SDXL"
-set "MODEL_07_OPT_1_NAME=Base (Safetensor, 12GB VRAM)" & set "MODEL_07_OPT_1_FILE=sd_xl_base_1.0_0.9vae.safetensors" & set "MODEL_07_OPT_1_TYPE=checkpoint"
-:: Model 8: SD3
-set "MODEL_08_NAME=SD3"
-set "MODEL_08_OPT_1_NAME=Medium 2B (Safetensor, 6-8GB VRAM)"   & set "MODEL_08_OPT_1_FILE=sd3.5_medium.safetensors" & set "MODEL_08_OPT_1_TYPE=checkpoint"
-set "MODEL_08_OPT_2_NAME=Large 8B  (Safetensor, 16-24GB VRAM)" & set "MODEL_08_OPT_2_FILE=sd3.5_large.safetensors"  & set "MODEL_08_OPT_2_TYPE=checkpoint"
-:: Model 9: WAN2.1T2V
-set "MODEL_09_NAME=WAN2.1-T2V"
-set "MODEL_09_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_09_OPT_1_FILE=wan2.1-t2v-14b-Q4_K_S.gguf"            & set "MODEL_09_OPT_1_TYPE=gguf"
-set "MODEL_09_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_09_OPT_2_FILE=wan2.1-t2v-14b-Q5_K_S.gguf"            & set "MODEL_09_OPT_2_TYPE=gguf"
-set "MODEL_09_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_09_OPT_3_FILE=wan2.1-t2v-14b-Q8_0.gguf"              & set "MODEL_09_OPT_3_TYPE=gguf"
-set "MODEL_09_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_09_OPT_4_FILE=wan2.1_t2v_14B_fp8_e4m3fn.safetensors" & set "MODEL_09_OPT_4_TYPE=checkpoint" & set "MODEL_09_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_14B_fp8_e4m3fn.safetensors?download=true"
-set "MODEL_09_OPT_5_NAME=BF16   (Safetensors, >32GB VRAM)" & set "MODEL_09_OPT_5_FILE=wan2.1_t2v_14B_bf16.safetensors"       & set "MODEL_09_OPT_5_TYPE=checkpoint"
-:: Model 10: WAN2.1I2V
-set "MODEL_10_NAME=WAN2.1-I2V-480"
-set "MODEL_10_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_10_OPT_1_FILE=wan2.1-i2v-14b-480p-Q4_K_S.gguf"            & set "MODEL_10_OPT_1_TYPE=gguf"
-set "MODEL_10_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_10_OPT_2_FILE=wan2.1-i2v-14b-480p-Q5_K_S.gguf"            & set "MODEL_10_OPT_2_TYPE=gguf"
-set "MODEL_10_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_10_OPT_3_FILE=wan2.1-i2v-14b-480p-Q8_0.gguf"              & set "MODEL_10_OPT_3_TYPE=gguf"
-set "MODEL_10_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_10_OPT_4_FILE=wan2.1_i2v_480p_14B_fp8_e4m3fn.safetensors" & set "MODEL_10_OPT_4_TYPE=checkpoint" & set "MODEL_10_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_i2v_480p_14B_fp8_e4m3fn.safetensors?download=true"
-set "MODEL_10_OPT_5_NAME=BF16   (Safetensors, >32GB VRAM)" & set "MODEL_10_OPT_5_FILE=wan2.1_i2v_480p_14B_bf16.safetensors"       & set "MODEL_10_OPT_5_TYPE=checkpoint"
+:: Model 7: SD1.5
+set "MODEL_07_NAME=SD15"
+set "MODEL_07_OPT_1_NAME=FP16 (Safetensor, 12GB VRAM)" & set "MODEL_07_OPT_1_FILE=v1-5-pruned-emaonly-fp16.safetensors" & set "MODEL_07_OPT_1_TYPE=checkpoint" & set "MODEL_07_OPT_1_URL=https://huggingface.co/Comfy-Org/stable-diffusion-v1-5-archive/resolve/main/v1-5-pruned-emaonly-fp16.safetensors?download=true"
+:: Model 8: SDXL
+set "MODEL_08_NAME=SDXL"
+set "MODEL_08_OPT_1_NAME=Base (Safetensor, 12GB VRAM)" & set "MODEL_08_OPT_1_FILE=sd_xl_base_1.0_0.9vae.safetensors" & set "MODEL_08_OPT_1_TYPE=checkpoint"
+:: Model 9: SD3
+set "MODEL_09_NAME=SD3"
+set "MODEL_09_OPT_1_NAME=Medium 2B      (Safetensor, 6-8GB VRAM)"   & set "MODEL_09_OPT_1_FILE=sd3.5_medium.safetensors"      & set "MODEL_09_OPT_1_TYPE=diffusion_model"
+set "MODEL_09_OPT_2_NAME=Large Turbo 8B (Safetensor, 16-24GB VRAM)" & set "MODEL_09_OPT_2_FILE=sd3.5_large_turbo.safetensors" & set "MODEL_09_OPT_2_TYPE=checkpoints" & set "MODEL_09_OPT_2_URL=https://huggingface.co/stabilityai/stable-diffusion-3.5-large-turbo/resolve/main/sd3.5_large_turbo.safetensors?download=true"
+set "MODEL_09_OPT_3_NAME=Large 8B FP8   (Safetensor, 16-24GB VRAM)" & set "MODEL_09_OPT_3_FILE=sd3.5_large_fp8_scaled"        & set "MODEL_09_OPT_3_TYPE=checkpoints" & set "MODEL_09_OPT_3_URL=https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/sd3.5_large_fp8_scaled.safetensors?download=true"
+set "MODEL_09_OPT_4_NAME=Large 8B       (Safetensor, 16-24GB VRAM)" & set "MODEL_09_OPT_4_FILE=sd3.5_large.safetensors"       & set "MODEL_09_OPT_4_TYPE=diffusion_model"
+:: Model 10: WAN2.1T2V
+set "MODEL_10_NAME=WAN2.1-T2V"
+set "MODEL_10_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_10_OPT_1_FILE=wan2.1-t2v-14b-Q4_K_S.gguf"            & set "MODEL_10_OPT_1_TYPE=gguf"
+set "MODEL_10_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_10_OPT_2_FILE=wan2.1-t2v-14b-Q5_K_S.gguf"            & set "MODEL_10_OPT_2_TYPE=gguf"
+set "MODEL_10_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_10_OPT_3_FILE=wan2.1-t2v-14b-Q8_0.gguf"              & set "MODEL_10_OPT_3_TYPE=gguf"
+set "MODEL_10_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_10_OPT_4_FILE=wan2.1_t2v_14B_fp8_e4m3fn.safetensors" & set "MODEL_10_OPT_4_TYPE=diffusion_model" & set "MODEL_10_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_t2v_14B_fp8_e4m3fn.safetensors?download=true"
+set "MODEL_10_OPT_5_NAME=BF16   (Safetensors, >32GB VRAM)" & set "MODEL_10_OPT_5_FILE=wan2.1_t2v_14B_bf16.safetensors"       & set "MODEL_10_OPT_5_TYPE=diffusion_model"
 :: Model 11: WAN2.1I2V
-set "MODEL_11_NAME=WAN2.1-I2V-720"
-set "MODEL_11_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_11_OPT_1_FILE=wan2.1-i2v-14b-720p-Q4_K_S.gguf"            & set "MODEL_11_OPT_1_TYPE=gguf"
-set "MODEL_11_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_11_OPT_2_FILE=wan2.1-i2v-14b-720p-Q5_K_S.gguf"            & set "MODEL_11_OPT_2_TYPE=gguf"
-set "MODEL_11_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_11_OPT_3_FILE=wan2.1-i2v-14b-720p-Q8_0.gguf"              & set "MODEL_11_OPT_3_TYPE=gguf"
-set "MODEL_11_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_11_OPT_4_FILE=wan2.1_i2v_720p_14B_fp8_e4m3fn.safetensors" & set "MODEL_11_OPT_4_TYPE=checkpoint" & set "MODEL_11_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_i2v_720p_14B_fp8_e4m3fn.safetensors?download=true"
-set "MODEL_11_OPT_5_NAME=BF16   (Safetensors, >32GB VRAM)" & set "MODEL_11_OPT_5_FILE=wan2.1_i2v_720p_14B_bf16.safetensors"       & set "MODEL_11_OPT_5_TYPE=checkpoint"
-:: Model 12: WAN2.1T2VFusionX
-set "MODEL_12_NAME=WAN2.1-T2V-FusionX"
-set "MODEL_12_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"   & set "MODEL_12_OPT_1_FILE=Wan14BT2VFusionX-Q4_K_S.gguf" & set "MODEL_12_OPT_1_TYPE=gguf"
-set "MODEL_12_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)" & set "MODEL_12_OPT_2_FILE=Wan14BT2VFusionX-Q5_K_S.gguf" & set "MODEL_12_OPT_2_TYPE=gguf"
-set "MODEL_12_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"   & set "MODEL_12_OPT_3_FILE=Wan14BT2VFusionX-Q8_0.gguf"   & set "MODEL_12_OPT_3_TYPE=gguf"
-:: Model 13: WAN2.1FusionXVace
-set "MODEL_13_NAME=WAN2.1-T2V-FusionX-Vace"
-set "MODEL_13_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"   & set "MODEL_13_OPT_1_FILE=Wan2.1_T2V_14B_FusionX_VACE-Q4_K_S.gguf" & set "MODEL_13_OPT_1_TYPE=gguf"
-set "MODEL_13_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)" & set "MODEL_13_OPT_2_FILE=Wan2.1_T2V_14B_FusionX_VACE-Q5_K_S.gguf" & set "MODEL_13_OPT_2_TYPE=gguf"
-set "MODEL_13_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"   & set "MODEL_13_OPT_3_FILE=Wan2.1_T2V_14B_FusionX_VACE-Q8_0.gguf"   & set "MODEL_13_OPT_3_TYPE=gguf"
-:: Model 14: WAN2.1Vace
-set "MODEL_14_NAME=WAN2.1-Vace"
-set "MODEL_14_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_14_OPT_1_FILE=Wan2.1-VACE-14B-Q4_K_S.gguf"            & set "MODEL_14_OPT_1_TYPE=gguf"
-set "MODEL_14_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_14_OPT_2_FILE=Wan2.1-VACE-14B-Q5_K_S.gguf"            & set "MODEL_14_OPT_2_TYPE=gguf"
-set "MODEL_14_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_14_OPT_3_FILE=Wan2.1-VACE-14B-Q8_0.gguf"              & set "MODEL_14_OPT_3_TYPE=gguf"
-set "MODEL_14_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_14_OPT_4_FILE=wan2.1_vace_14B_fp8_e4m3fn.safetensors" & set "MODEL_14_OPT_4_TYPE=checkpoint" & set "MODEL_14_OPT_4_URL=https://huggingface.co/Kamikaze-88/Wan2.1-VACE-14B-fp8/resolve/main/wan2.1_vace_14B_fp8_e4m3fn.safetensors?download=true"
-set "MODEL_14_OPT_5_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_14_OPT_5_FILE=wan2.1_vace_14B_fp16.safetensors"       & set "MODEL_14_OPT_5_TYPE=checkpoint" & set "MODEL_14_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_vace_14B_fp16.safetensors?download=true"
-:: Model 15: WAN2.2I2VL
-set "MODEL_15_NAME=WAN2.2-I2V-L"
-set "MODEL_15_OPT_1_NAME=Low Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_15_OPT_1_FILE=Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf"            & set "MODEL_15_OPT_1_TYPE=gguf"
-set "MODEL_15_OPT_2_NAME=Low Q5_K_S  (GGUF, 12-16GB VRAM)"      & set "MODEL_15_OPT_2_FILE=Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf"            & set "MODEL_15_OPT_2_TYPE=gguf"
-set "MODEL_15_OPT_3_NAME=Low Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_15_OPT_3_FILE=Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf"              & set "MODEL_15_OPT_3_TYPE=gguf"
-set "MODEL_15_OPT_4_NAME=Low FP8     (Safetensors, >24GB VRAM)" & set "MODEL_15_OPT_4_FILE=wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors" & set "MODEL_15_OPT_4_TYPE=checkpoint" & set "MODEL_15_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors?download=true"
-set "MODEL_15_OPT_5_NAME=Low FP16    (Safetensors, >32GB VRAM)" & set "MODEL_15_OPT_5_FILE=wan2.2_i2v_low_noise_14B_fp16.safetensors"       & set "MODEL_15_OPT_5_TYPE=checkpoint" & set "MODEL_15_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors?download=true"
-:: Model 16: WAN2.2I2VH
-set "MODEL_16_NAME=WAN2.2-I2V-H"
-set "MODEL_16_OPT_1_NAME=High Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_16_OPT_1_FILE=Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf"            & set "MODEL_16_OPT_1_TYPE=gguf"
-set "MODEL_16_OPT_2_NAME=High Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_16_OPT_2_FILE=Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf"            & set "MODEL_16_OPT_2_TYPE=gguf"
-set "MODEL_16_OPT_3_NAME=High Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_16_OPT_3_FILE=Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf"              & set "MODEL_16_OPT_3_TYPE=gguf"
-set "MODEL_15_OPT_4_NAME=High FP8    (Safetensors, >24GB VRAM)" & set "MODEL_16_OPT_4_FILE=wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors" & set "MODEL_15_OPT_4_TYPE=checkpoint" & set "MODEL_16_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors?download=true"
-set "MODEL_15_OPT_5_NAME=High FP16   (Safetensors, >32GB VRAM)" & set "MODEL_16_OPT_5_FILE=wan2.2_i2v_high_noise_14B_fp16.safetensors"       & set "MODEL_15_OPT_5_TYPE=checkpoint" & set "MODEL_16_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors?download=true"
-:: Model 17: WAN2.2T2VL
-set "MODEL_17_NAME=WAN2.2-T2V-L"
-set "MODEL_17_OPT_1_NAME=Low Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_17_OPT_1_FILE=Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf"            & set "MODEL_17_OPT_1_TYPE=gguf"
-set "MODEL_17_OPT_2_NAME=Low Q5_K_S  (GGUF, 12-16GB VRAM)"      & set "MODEL_17_OPT_2_FILE=Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf"            & set "MODEL_17_OPT_2_TYPE=gguf"
-set "MODEL_17_OPT_3_NAME=Low Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_17_OPT_3_FILE=Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf"              & set "MODEL_17_OPT_3_TYPE=gguf"
-set "MODEL_17_OPT_4_NAME=Low FP8     (Safetensors, >24GB VRAM)" & set "MODEL_17_OPT_4_FILE=wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors" & set "MODEL_17_OPT_4_TYPE=checkpoint" & set "MODEL_17_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors?download=true"
-set "MODEL_17_OPT_5_NAME=Low FP16    (Safetensors, >32GB VRAM)" & set "MODEL_17_OPT_5_FILE=wan2.2_t2v_low_noise_14B_fp16.safetensors"       & set "MODEL_17_OPT_5_TYPE=checkpoint" & set "MODEL_17_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors?download=true"
-:: Model 18: WAN2.2T2VH
-set "MODEL_18_NAME=WAN2.2-T2V-H"
-set "MODEL_18_OPT_1_NAME=High Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_18_OPT_1_FILE=Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf"            & set "MODEL_18_OPT_1_TYPE=gguf"
-set "MODEL_18_OPT_2_NAME=High Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_18_OPT_2_FILE=Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf"            & set "MODEL_18_OPT_2_TYPE=gguf"
-set "MODEL_18_OPT_3_NAME=High Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_18_OPT_3_FILE=Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf"              & set "MODEL_18_OPT_3_TYPE=gguf"
-set "MODEL_18_OPT_4_NAME=High FP8    (Safetensors, >24GB VRAM)" & set "MODEL_18_OPT_4_FILE=wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors" & set "MODEL_18_OPT_4_TYPE=checkpoint" & set "MODEL_18_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors?download=true"
-set "MODEL_18_OPT_5_NAME=High FP16   (Safetensors, >32GB VRAM)" & set "MODEL_18_OPT_5_FILE=wan2.2_t2v_high_noise_14B_fp16.safetensors"       & set "MODEL_18_OPT_5_TYPE=checkpoint" & set "MODEL_18_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors?download=true"
-:: Model 19: WAN2.2TI2V
-set "MODEL_19_NAME=WAN2.2-TI2V"
-set "MODEL_19_OPT_1_NAME=Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_19_OPT_1_FILE=Wan2.2-TI2V-5B-Q4_K_S.gguf"      & set "MODEL_19_OPT_1_TYPE=gguf"
-set "MODEL_19_OPT_2_NAME=Q5_K_S  (GGUF, 12-16GB VRAM)"      & set "MODEL_19_OPT_2_FILE=Wan2.2-TI2V-5B-Q5_K_S.gguf"      & set "MODEL_19_OPT_2_TYPE=gguf"
-set "MODEL_19_OPT_3_NAME=Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_19_OPT_3_FILE=Wan2.2-TI2V-5B-Q8_0.gguf"        & set "MODEL_19_OPT_3_TYPE=gguf"
-set "MODEL_19_OPT_4_NAME=FP16    (Safetensors, >32GB VRAM)" & set "MODEL_19_OPT_4_FILE=wan2.2_ti2v_5B_fp16.safetensors" & set "MODEL_19_OPT_4_TYPE=checkpoint" & set "MODEL_19_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors?download=true"
+set "MODEL_11_NAME=WAN2.1-I2V-480"
+set "MODEL_11_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_11_OPT_1_FILE=wan2.1-i2v-14b-480p-Q4_K_S.gguf"            & set "MODEL_11_OPT_1_TYPE=gguf"
+set "MODEL_11_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_11_OPT_2_FILE=wan2.1-i2v-14b-480p-Q5_K_S.gguf"            & set "MODEL_11_OPT_2_TYPE=gguf"
+set "MODEL_11_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_11_OPT_3_FILE=wan2.1-i2v-14b-480p-Q8_0.gguf"              & set "MODEL_11_OPT_3_TYPE=gguf"
+set "MODEL_11_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_11_OPT_4_FILE=wan2.1_i2v_480p_14B_fp8_e4m3fn.safetensors" & set "MODEL_11_OPT_4_TYPE=diffusion_model" & set "MODEL_11_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_i2v_480p_14B_fp8_e4m3fn.safetensors?download=true"
+set "MODEL_11_OPT_5_NAME=BF16   (Safetensors, >32GB VRAM)" & set "MODEL_11_OPT_5_FILE=wan2.1_i2v_480p_14B_bf16.safetensors"       & set "MODEL_11_OPT_5_TYPE=diffusion_model"
+:: Model 12: WAN2.1I2V
+set "MODEL_12_NAME=WAN2.1-I2V-720"
+set "MODEL_12_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_12_OPT_1_FILE=wan2.1-i2v-14b-720p-Q4_K_S.gguf"            & set "MODEL_12_OPT_1_TYPE=gguf"
+set "MODEL_12_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_12_OPT_2_FILE=wan2.1-i2v-14b-720p-Q5_K_S.gguf"            & set "MODEL_12_OPT_2_TYPE=gguf"
+set "MODEL_12_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_12_OPT_3_FILE=wan2.1-i2v-14b-720p-Q8_0.gguf"              & set "MODEL_12_OPT_3_TYPE=gguf"
+set "MODEL_12_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_12_OPT_4_FILE=wan2.1_i2v_720p_14B_fp8_e4m3fn.safetensors" & set "MODEL_12_OPT_4_TYPE=diffusion_model" & set "MODEL_12_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_i2v_720p_14B_fp8_e4m3fn.safetensors?download=true"
+set "MODEL_12_OPT_5_NAME=BF16   (Safetensors, >32GB VRAM)" & set "MODEL_12_OPT_5_FILE=wan2.1_i2v_720p_14B_bf16.safetensors"       & set "MODEL_12_OPT_5_TYPE=diffusion_model"
+:: Model 13: WAN2.1T2VFusionX
+set "MODEL_13_NAME=WAN2.1-T2V-FusionX"
+set "MODEL_13_OPT_1_NAME=Q4_K_S (GGUF, <13GB VRAM)"   & set "MODEL_13_OPT_1_FILE=Wan14BT2VFusionX-Q4_K_S.gguf" & set "MODEL_13_OPT_1_TYPE=gguf"
+set "MODEL_13_OPT_2_NAME=Q5_K_S (GGUF, 13-16GB VRAM)" & set "MODEL_13_OPT_2_FILE=Wan14BT2VFusionX-Q5_K_S.gguf" & set "MODEL_13_OPT_2_TYPE=gguf"
+set "MODEL_13_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"   & set "MODEL_13_OPT_3_FILE=Wan14BT2VFusionX-Q8_0.gguf"   & set "MODEL_13_OPT_3_TYPE=gguf"
+:: Model 14: WAN2.1FusionXVace
+set "MODEL_14_NAME=WAN2.1-T2V-FusionX-Vace"
+set "MODEL_14_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"   & set "MODEL_14_OPT_1_FILE=Wan2.1_T2V_14B_FusionX_VACE-Q4_K_S.gguf" & set "MODEL_14_OPT_1_TYPE=gguf"
+set "MODEL_14_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)" & set "MODEL_14_OPT_2_FILE=Wan2.1_T2V_14B_FusionX_VACE-Q5_K_S.gguf" & set "MODEL_14_OPT_2_TYPE=gguf"
+set "MODEL_14_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"   & set "MODEL_14_OPT_3_FILE=Wan2.1_T2V_14B_FusionX_VACE-Q8_0.gguf"   & set "MODEL_14_OPT_3_TYPE=gguf"
+:: Model 15: WAN2.1Vace
+set "MODEL_15_NAME=WAN2.1-Vace"
+set "MODEL_15_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_15_OPT_1_FILE=Wan2.1-VACE-15B-Q4_K_S.gguf"            & set "MODEL_15_OPT_1_TYPE=gguf"
+set "MODEL_15_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_15_OPT_2_FILE=Wan2.1-VACE-15B-Q5_K_S.gguf"            & set "MODEL_15_OPT_2_TYPE=gguf"
+set "MODEL_15_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_15_OPT_3_FILE=Wan2.1-VACE-15B-Q8_0.gguf"              & set "MODEL_15_OPT_3_TYPE=gguf"
+set "MODEL_15_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_15_OPT_4_FILE=wan2.1_vace_15B_fp8_e4m3fn.safetensors" & set "MODEL_15_OPT_4_TYPE=diffusion_model" & set "MODEL_15_OPT_4_URL=https://huggingface.co/Kamikaze-88/Wan2.1-VACE-15B-fp8/resolve/main/wan2.1_vace_15B_fp8_e4m3fn.safetensors?download=true"
+set "MODEL_15_OPT_5_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_15_OPT_5_FILE=wan2.1_vace_15B_fp16.safetensors"       & set "MODEL_15_OPT_5_TYPE=diffusion_model" & set "MODEL_15_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_vace_15B_fp16.safetensors?download=true"
+:: Model 16: WAN2.2I2VL
+set "MODEL_16_NAME=WAN2.2-I2V-L"
+set "MODEL_16_OPT_1_NAME=Low Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_16_OPT_1_FILE=Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf"            & set "MODEL_16_OPT_1_TYPE=gguf"
+set "MODEL_16_OPT_2_NAME=Low Q5_K_S  (GGUF, 12-16GB VRAM)"      & set "MODEL_16_OPT_2_FILE=Wan2.2-I2V-A14B-LowNoise-Q5_K_S.gguf"            & set "MODEL_16_OPT_2_TYPE=gguf"
+set "MODEL_16_OPT_3_NAME=Low Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_16_OPT_3_FILE=Wan2.2-I2V-A14B-LowNoise-Q8_0.gguf"              & set "MODEL_16_OPT_3_TYPE=gguf"
+set "MODEL_16_OPT_4_NAME=Low FP8     (Safetensors, >24GB VRAM)" & set "MODEL_16_OPT_4_FILE=wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors" & set "MODEL_16_OPT_4_TYPE=diffusion_model" & set "MODEL_16_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp8_scaled.safetensors?download=true"
+set "MODEL_16_OPT_5_NAME=Low FP16    (Safetensors, >32GB VRAM)" & set "MODEL_16_OPT_5_FILE=wan2.2_i2v_low_noise_14B_fp16.safetensors"       & set "MODEL_16_OPT_5_TYPE=diffusion_model" & set "MODEL_16_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_low_noise_14B_fp16.safetensors?download=true"
+:: Model 17: WAN2.2I2VH
+set "MODEL_17_NAME=WAN2.2-I2V-H"
+set "MODEL_17_OPT_1_NAME=High Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_17_OPT_1_FILE=Wan2.2-I2V-A14B-HighNoise-Q4_K_S.gguf"            & set "MODEL_17_OPT_1_TYPE=gguf"
+set "MODEL_17_OPT_2_NAME=High Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_17_OPT_2_FILE=Wan2.2-I2V-A14B-HighNoise-Q5_K_S.gguf"            & set "MODEL_17_OPT_2_TYPE=gguf"
+set "MODEL_17_OPT_3_NAME=High Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_17_OPT_3_FILE=Wan2.2-I2V-A14B-HighNoise-Q8_0.gguf"              & set "MODEL_17_OPT_3_TYPE=gguf"
+set "MODEL_17_OPT_4_NAME=High FP8    (Safetensors, >24GB VRAM)" & set "MODEL_17_OPT_4_FILE=wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors" & set "MODEL_17_OPT_4_TYPE=diffusion_model" & set "MODEL_17_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors?download=true"
+set "MODEL_17_OPT_5_NAME=High FP16   (Safetensors, >32GB VRAM)" & set "MODEL_17_OPT_5_FILE=wan2.2_i2v_high_noise_14B_fp16.safetensors"       & set "MODEL_17_OPT_5_TYPE=diffusion_model" & set "MODEL_17_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_i2v_high_noise_14B_fp16.safetensors?download=true"
+:: Model 18: WAN2.2T2VL
+set "MODEL_18_NAME=WAN2.2-T2V-L"
+set "MODEL_18_OPT_1_NAME=Low Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_18_OPT_1_FILE=Wan2.2-T2V-A14B-LowNoise-Q4_K_S.gguf"            & set "MODEL_18_OPT_1_TYPE=gguf"
+set "MODEL_18_OPT_2_NAME=Low Q5_K_S  (GGUF, 12-16GB VRAM)"      & set "MODEL_18_OPT_2_FILE=Wan2.2-T2V-A14B-LowNoise-Q5_K_S.gguf"            & set "MODEL_18_OPT_2_TYPE=gguf"
+set "MODEL_18_OPT_3_NAME=Low Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_18_OPT_3_FILE=Wan2.2-T2V-A14B-LowNoise-Q8_0.gguf"              & set "MODEL_18_OPT_3_TYPE=gguf"
+set "MODEL_18_OPT_4_NAME=Low FP8     (Safetensors, >24GB VRAM)" & set "MODEL_18_OPT_4_FILE=wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors" & set "MODEL_18_OPT_4_TYPE=diffusion_model" & set "MODEL_18_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp8_scaled.safetensors?download=true"
+set "MODEL_18_OPT_5_NAME=Low FP16    (Safetensors, >32GB VRAM)" & set "MODEL_18_OPT_5_FILE=wan2.2_t2v_low_noise_14B_fp16.safetensors"       & set "MODEL_18_OPT_5_TYPE=diffusion_model" & set "MODEL_18_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_low_noise_14B_fp16.safetensors?download=true"
+:: Model 19: WAN2.2T2VH
+set "MODEL_19_NAME=WAN2.2-T2V-H"
+set "MODEL_19_OPT_1_NAME=High Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_19_OPT_1_FILE=Wan2.2-T2V-A14B-HighNoise-Q4_K_S.gguf"            & set "MODEL_19_OPT_1_TYPE=gguf"
+set "MODEL_19_OPT_2_NAME=High Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_19_OPT_2_FILE=Wan2.2-T2V-A14B-HighNoise-Q5_K_S.gguf"            & set "MODEL_19_OPT_2_TYPE=gguf"
+set "MODEL_19_OPT_3_NAME=High Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_19_OPT_3_FILE=Wan2.2-T2V-A14B-HighNoise-Q8_0.gguf"              & set "MODEL_19_OPT_3_TYPE=gguf"
+set "MODEL_19_OPT_4_NAME=High FP8    (Safetensors, >24GB VRAM)" & set "MODEL_19_OPT_4_FILE=wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors" & set "MODEL_19_OPT_4_TYPE=diffusion_model" & set "MODEL_19_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp8_scaled.safetensors?download=true"
+set "MODEL_19_OPT_5_NAME=High FP16   (Safetensors, >32GB VRAM)" & set "MODEL_19_OPT_5_FILE=wan2.2_t2v_high_noise_14B_fp16.safetensors"       & set "MODEL_19_OPT_5_TYPE=diffusion_model" & set "MODEL_19_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_t2v_high_noise_14B_fp16.safetensors?download=true"
+:: Model 20: WAN2.2TI2V
+set "MODEL_20_NAME=WAN2.2-TI2V"
+set "MODEL_20_OPT_1_NAME=Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_20_OPT_1_FILE=Wan2.2-TI2V-5B-Q4_K_S.gguf"      & set "MODEL_20_OPT_1_TYPE=gguf"
+set "MODEL_20_OPT_2_NAME=Q5_K_S  (GGUF, 12-16GB VRAM)"      & set "MODEL_20_OPT_2_FILE=Wan2.2-TI2V-5B-Q5_K_S.gguf"      & set "MODEL_20_OPT_2_TYPE=gguf"
+set "MODEL_20_OPT_3_NAME=Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_20_OPT_3_FILE=Wan2.2-TI2V-5B-Q8_0.gguf"        & set "MODEL_20_OPT_3_TYPE=gguf"
+set "MODEL_20_OPT_4_NAME=FP16    (Safetensors, >32GB VRAM)" & set "MODEL_20_OPT_4_FILE=wan2.2_ti2v_5B_fp16.safetensors" & set "MODEL_20_OPT_4_TYPE=diffusion_model" & set "MODEL_20_OPT_4_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors?download=true"
 
 :: --- Custom Node Repositories (Robust Method) ---
 set "NODE_URL_01=https://github.com/ltdrdata/ComfyUI-Manager.git"
@@ -213,6 +223,8 @@ set "NODE_URL_39=https://github.com/Draek2077/comfyui-draekz-nodes.git"
 set "NODE_URL_40=https://github.com/crystian/ComfyUI-Crystools.git"
 set "NODE_URL_41=https://github.com/sipherxyz/comfyui-art-venture.git"
 set "NODE_URL_42=https://github.com/digitaljohn/comfyui-propost.git"
+set "NODE_URL_43=https://github.com/miaoshouai/ComfyUI-Miaoshouai-Tagger.git"
+set "NODE_URL_44=https://github.com/jags111/efficiency-nodes-comfyui.git"
 
 :: -----------------------------------------------------------------------------
 :: Section 2: Main Menu
@@ -244,7 +256,11 @@ for /l %%G in (1,1,99) do (
 if not defined MODEL_STATUS_STRING set "MODEL_STATUS_STRING=%PURPLE% [None Selected]%RESET%"
 
 echo %YELLOW%[ Setup ^& Status ]%RESET%
-echo %WHITE%  0) Verify Prerequisites%RESET%
+if "!INSTALL_SERVER_MANAGER!"=="1" (
+    echo %WHITE%  0^) Install Server Manager %GREEN%[X]%RESET%
+) else (
+    echo %WHITE%  0^) Install Server Manager %RED%[ ]%RESET%
+)
 echo %WHITE%  1) Full Automatic Installation (All Models)%RESET%
 echo %WHITE%  2) Select Models...%GREEN%!MODEL_STATUS_STRING!%RESET%
 echo.
@@ -254,9 +270,13 @@ echo %WHITE%  4) Install SELECTED Models%RESET%
 echo %WHITE%  5) Install Custom Nodes%RESET%
 echo.
 echo %YELLOW%[ Supporting Modules ]%RESET%
-echo %WHITE%  6) Install Triton ^& Sage Attention (+Enable Flag)%RESET%
-echo %WHITE%  7) Install Python Include/Libs for Triton%RESET%
-echo %WHITE%  8) Verify Full Installation%RESET%
+echo %WHITE%  6) Configure Settings ^& Shortcuts%RESET%
+echo %WHITE%  7) Install Triton ^& Sage Attention (+Enable Flag)%RESET%
+echo %WHITE%  8) Install Python Include/Libs for Triton%RESET%
+echo %WHITE%  9) Verify Full Installation%RESET%
+echo.
+echo %YELLOW%[ Diagnostics ]%RESET%
+echo %WHITE%  V) Verify Prerequisites%RESET%
 echo.
 echo %WHITE%  X) Quit%RESET%
 echo.
@@ -266,15 +286,17 @@ if defined LAST_ACTION_MSG echo  Last Action: !LAST_ACTION_MSG!
 echo.
 set /p "main_choice=%WHITE%Enter your choice and press ENTER: %RESET%"
 
-if "%main_choice%"=="0" goto :check_prereqs_menu
+if "%main_choice%"=="0" goto :toggle_server_manager
 if "%main_choice%"=="1" goto :full_install
 if "%main_choice%"=="2" goto :model_selection_menu
 if "%main_choice%"=="3" goto :install_comfyui
 if "%main_choice%"=="4" goto :install_models
 if "%main_choice%"=="5" goto :install_nodes
-if "%main_choice%"=="6" goto :install_triton_sage
-if "%main_choice%"=="7" goto :setup_python_libs
-if "%main_choice%"=="8" goto :verify_all
+if "%main_choice%"=="6" goto :configure_comfyui
+if "%main_choice%"=="7" goto :install_triton_sage
+if "%main_choice%"=="8" goto :setup_python_libs
+if "%main_choice%"=="9" goto :verify_all
+if /i "%main_choice%"=="V" goto :verify_prereqs_menu
 if /i "%main_choice%"=="X" goto :exit_script
 
 set "LAST_ACTION_MSG=%RED%Invalid choice. Please try again.%RESET%"
@@ -285,6 +307,17 @@ goto :main_menu
 :: Section 3: Core Logic and Subroutines
 :: -----------------------------------------------------------------------------
 
+:: --- Toggle Server Manager ---
+:toggle_server_manager
+if "%INSTALL_SERVER_MANAGER%"=="1" (
+    set "INSTALL_SERVER_MANAGER=0"
+    set "LAST_ACTION_MSG=%GREEN%Server Manager installation DISABLED.%RESET%"
+) else (
+    set "INSTALL_SERVER_MANAGER=1"
+    set "LAST_ACTION_MSG=%GREEN%Server Manager installation ENABLED.%RESET%"
+)
+goto :main_menu
+
 :: --- Full Automated Install ---
 :full_install
 cls
@@ -292,6 +325,8 @@ echo.
 echo %BLUE%======================================================================%RESET%
 echo %BLUE%               Starting Full Automated Installation                   %RESET%
 echo %BLUE%======================================================================%RESET%
+echo %YELLOW%[INFO] Enabling Server Manager installation for Full Install mode.%RESET%
+set "INSTALL_SERVER_MANAGER=1"
 call :auto_install_model_setup
 if "%AUTO_INSTALL_QUALITY%"=="" (
     set "LAST_ACTION_MSG=%PURPLE%Full installation was cancelled by user.%RESET%"
@@ -373,7 +408,7 @@ for /l %%G in (1,1,99) do (
 )
 goto :eof
 
-:check_prereqs_menu
+:verify_prereqs_menu
 cls
 echo.
 echo %BLUE%======================================================================%RESET%
@@ -432,7 +467,7 @@ if %errorlevel% neq 0 (
 echo.
 echo %YELLOW%Extracting ComfyUI...%RESET%
 "%SEVEN_ZIP_PATH%" x "ComfyUI_portable.7z" -aoa -o"%CD%" >nul
-REM del "ComfyUI_portable.7z"
+del "ComfyUI_portable.7z"
 if not exist "%COMFYUI_DIR%" (
     echo %RED%Extraction failed. Aborting.%RESET%
     set "LAST_ACTION_MSG=%RED%ComfyUI extraction failed.%RESET%"
@@ -440,7 +475,13 @@ if not exist "%COMFYUI_DIR%" (
     exit /b 1
 )
 echo %GREEN%ComfyUI Core extracted successfully.%RESET%
+call :update_comfyui
+call :configure_comfyui
+call :install_server_manager
+set "LAST_ACTION_MSG=%GREEN%ComfyUI Core installed successfully.%RESET%"
+goto :main_menu_return
 
+:configure_comfyui
 :: Define the full output file path and a temporary file for decoding
 SET "OUTPUT_FILE=%COMFYUI_DIR%\ComfyUI\user\default\comfy.settings.json"
 SET "OUTPUT_FILE2=%COMFYUI_DIR%\ComfyUI\user\default\ComfyUI-Manager\config.ini"
@@ -466,12 +507,64 @@ certutil -f -decode "%TEMP_B64_FILE2%" "%OUTPUT_FILE2%" >nul
 del "%TEMP_B64_FILE%"
 del "%TEMP_B64_FILE2%"
 
-echo %GREEN%ComfyUI settings files created successfully!%RESET%
-echo.
+SET ABSOLUTE_COMFYUI_DIR=%~dp0%COMFYUI_DIR%
+SET TARGET_URL=http://127.0.0.1:8188/
+SET TARGET_EXE=%ABSOLUTE_COMFYUI_DIR%\run_nvidia_gpu_fast_fp16_accumulation.bat
+SET SERVER_ICON_FILE=%ABSOLUTE_COMFYUI_DIR%\ComfyUI\Comfy_Logo.ico
+SET CLIENT_ICON_FILE=%ABSOLUTE_COMFYUI_DIR%\ComfyUI\Comfy_Client.ico
+SET SERVER_SHORTCUT_NAME=ComfyUI Server.lnk
+SET CLIENT_SHORTCUT_NAME=ComfyUI Client.lnk
+SET EDGE_PATH=C:\Progra~2\Microsoft\Edge\Application\msedge.exe
 
-call :update_comfyui
-set "LAST_ACTION_MSG=%GREEN%ComfyUI Core installed successfully.%RESET%"
+echo.
+echo %YELLOW%Creating Desktop and Start Menu shortcuts...%RESET%
+
+:: --- Create Shortcuts (only if Server Manager is NOT installed) ---
+if "%INSTALL_SERVER_MANAGER%"=="0" (
+    call :grab "%SERVER_ICON_FILE%" "https://github.com/Comfy-Org/desktop/raw/refs/heads/main/assets/UI/Comfy_Logo.ico"
+
+    powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $DesktopPath = [Environment]::GetFolderPath('Desktop'); $ShortcutPath = Join-Path -Path $DesktopPath -ChildPath '%SERVER_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = 'C:\Windows\System32\cmd.exe'; $s.Arguments = '/c \"%TARGET_EXE%\"'; $s.WorkingDirectory = '%ABSOLUTE_COMFYUI_DIR%'; $s.IconLocation = '%SERVER_ICON_FILE%,0'; $s.WindowStyle = 7; $s.Save()"
+    powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $StartMenuPath = [Environment]::GetFolderPath('Programs'); $ShortcutPath = Join-Path -Path $StartMenuPath -ChildPath '%SERVER_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = 'C:\Windows\System32\cmd.exe'; $s.Arguments = '/c \"%TARGET_EXE%\"'; $s.WorkingDirectory = '%ABSOLUTE_COMFYUI_DIR%'; $s.IconLocation = '%SERVER_ICON_FILE%,0'; $s.WindowStyle = 7; $s.Save()"
+) else (
+    echo.
+    echo %PURPLE%[INFO] Skipping server shortcut creation because the Server Manager is being installed.%RESET%
+)
+
+call :grab "%CLIENT_ICON_FILE%" "https://drive.usercontent.google.com/download?id=1ehBRfElOe-v-zHQTKoCRInkzL8HBtYBZ&export=download&authuser=0&confirm=t&uuid=bc713c44-c765-4a89-a212-1b2ba8016a15&at=AN8xHoqQo2CQKoir69Qmh2iGscvg:1756246657739"
+
+powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $DesktopPath = [Environment]::GetFolderPath('Desktop'); $ShortcutPath = Join-Path -Path $DesktopPath -ChildPath '%CLIENT_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = '%EDGE_PATH%'; $s.Arguments = '--app=%TARGET_URL%'; $s.IconLocation = '%CLIENT_ICON_FILE%'; $s.Save()"
+powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $StartMenuPath = [Environment]::GetFolderPath('Programs'); $ShortcutPath = Join-Path -Path $StartMenuPath -ChildPath '%CLIENT_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = '%EDGE_PATH%'; $s.Arguments = '--app=%TARGET_URL%'; $s.IconLocation = '%CLIENT_ICON_FILE%'; $s.Save()"
+
+echo %GREEN%ComfyUI configuration complete!%RESET%
+echo.
+set "LAST_ACTION_MSG=%GREEN%ComfyUI configuration complete!%RESET%
 goto :main_menu_return
+
+:: --- Install Server Manager ---
+:install_server_manager
+if "%INSTALL_SERVER_MANAGER%"=="0" (
+    echo %PURPLE%[INFO] Skipping Server Manager installation as per user setting.%RESET%
+    goto :eof
+)
+echo.
+echo %BLUE%======================================================================%RESET%
+echo %BLUE%                 Installing ComfyUI Server Manager                    %RESET%
+echo %BLUE%======================================================================%RESET%
+echo.
+echo %YELLOW%Downloading Server Manager installer...%RESET%
+call :grab "%SERVER_MANAGER_MSI_NAME%" "%SERVER_MANAGER_URL%"
+if %errorlevel% neq 0 (
+    echo %RED%Server Manager download failed. Skipping installation.%RESET%
+    set "LAST_ACTION_MSG=%RED%Server Manager download failed.%RESET%"
+    goto :eof
+)
+
+echo %YELLOW%Starting Server Manager installation (will run in background)...%RESET%
+cmd /c start "MSI Installer" msiexec /i "%SERVER_MANAGER_MSI_NAME%" /qb
+
+echo %GREEN%Server Manager installation has been launched.%RESET%
+echo %PURPLE%You may need to approve a UAC prompt for the installation.%RESET%
+goto :eof
 
 :: --- ComfyUI Update Function ---
 :update_comfyui
@@ -529,8 +622,9 @@ python.exe -m pip install opencv-python opencv-python-headless
 python.exe -m pip install xformers torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu128
 python.exe -m pip install https://github.com/nunchaku-tech/nunchaku/releases/download/v1.0.0dev20250823/nunchaku-1.0.0.dev20250823+torch2.8-cp312-cp312-win_amd64.whl
 
-echo %YELLOW%Removing the insightface wheel file...%RESET%
+echo %YELLOW%Cleaning up files...%RESET%
 del "!WHL_FILE!"
+del "%SERVER_MANAGER_MSI_NAME%"
 
 popd
 echo %GREEN%Core Python packages installed.%RESET%
@@ -676,8 +770,14 @@ echo.
 :: ============================================================================
 :: Section to set flags based on selected model families
 :: ============================================================================
-set "FLAG_FLUX_SELECTED=" & set "FLAG_QWEN_SELECTED=" & set "FLAG_HIDREAM_SELECTED="
-set "FLAG_SDXL_SELECTED=" & set "FLAG_SD3_SELECTED="  & set "FLAG_WAN21_SELECTED=" & set "FLAG_WAN22_SELECTED="
+set "FLAG_FLUX_SELECTED="
+set "FLAG_QWEN_SELECTED="
+set "FLAG_HIDREAM_SELECTED="
+set "FLAG_SD15_SELECTED="
+set "FLAG_SDXL_SELECTED="
+set "FLAG_SD3_SELECTED="
+set "FLAG_WAN21_SELECTED="
+set "FLAG_WAN22_SELECTED="
 
 for /l %%G in (1,1,99) do (
     set "num=0%%G"
@@ -692,6 +792,7 @@ for /l %%G in (1,1,99) do (
             echo !MODEL_FAMILY_NAME! | findstr /i "FLUX" >nul   && set "FLAG_FLUX_SELECTED=1"
             echo !MODEL_FAMILY_NAME! | findstr /i "Qwen" >nul   && set "FLAG_QWEN_SELECTED=1"
             echo !MODEL_FAMILY_NAME! | findstr /i "HiDream" >nul&& set "FLAG_HIDREAM_SELECTED=1"
+            echo !MODEL_FAMILY_NAME! | findstr /i "SD15" >nul&& set "FLAG_SD15_SELECTED=1"
             echo !MODEL_FAMILY_NAME! | findstr /i "SDXL" >nul   && set "FLAG_SDXL_SELECTED=1"
             echo !MODEL_FAMILY_NAME! | findstr /i "SD3" >nul    && set "FLAG_SD3_SELECTED=1"
             echo !MODEL_FAMILY_NAME! | findstr /i "WAN2.1" >nul && set "FLAG_WAN21_SELECTED=1"
@@ -792,6 +893,8 @@ if defined FLAG_QWEN_SELECTED (
     call :grab "text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors" "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true"
     call :grab "vae\qwen_image_vae.safetensors" "%HF_FLX_URL%/qwen_image_vae.safetensors?download=true"
     call :grab "loras\Qwen-Image-Lightning-8steps-V1.0.safetensors" "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.0.safetensors?download=true"
+    call :grab "loras\Qwen-Image-Lightning-4steps-V1.0.safetensors" "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-4steps-V1.0.safetensors?download=true"
+    call :grab "loras/qwen_image_union_diffsynth_lora.safetensors" "https://huggingface.co/Comfy-Org/Qwen-Image-DiffSynth-ControlNets/resolve/main/split_files/loras/qwen_image_union_diffsynth_lora.safetensors?download=true"
 )
 
 :: --- HiDream Models ---
@@ -799,6 +902,13 @@ if defined FLAG_HIDREAM_SELECTED (
     echo %YELLOW%--- Downloading supporting files for HiDream...%RESET%
     call :grab "text_encoders\clip_g_hidream.safetensors" "%HF_FLX_URL%/clip_g_hidream.safetensors?download=true"
     call :grab "text_encoders\clip_l_hidream.safetensors" "%HF_FLX_URL%/clip_l_hidream.safetensors?download=true"
+)
+
+:: --- SD Models ---
+if defined FLAG_SD15_SELECTED (
+echo %YELLOW%--- Downloading supporting files for SD1.5...%RESET%
+    call :grab "vae_approx\taesd_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth"
+    call :grab "vae_approx\taesd_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth"
 )
 
 :: --- SD3 Models ---
@@ -809,6 +919,9 @@ if defined FLAG_SD3_SELECTED (
     call :grab "vae\sd35_vae.safetensors" "https://civitai.com/api/download/models/985137?type=Model&format=SafeTensor"
     call :grab "vae_approx\taesd3_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd3_decoder.pth"
     call :grab "vae_approx\taesd3_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd3_encoder.pth"
+    call :grab "controlnet\sd3.5_large_controlnet_depth.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_depth.safetensors?download=true"
+    call :grab "controlnet\sd3.5_large_controlnet_canny.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_canny.safetensors?download=true"
+    call :grab "controlnet\sd3.5_large_controlnet_blur.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_blur.safetensors?download=true"
 )
 
 :: --- SDXL Models ---
@@ -839,8 +952,13 @@ if defined FLAG_WAN22_SELECTED (
     call :grab "vae\wan_2.2_vae.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan2.2_vae.safetensors?download=true"
     call :grab "loras\Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors?download=true"
     call :grab "loras\Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors?download=true"
+    call :grab "loras\wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors?download=true"
+    call :grab "loras\wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors?download=true"
     call :grab "loras\Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors?download=true"
     call :grab "loras\Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors?download=true"
+    call :grab "loras\wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors?download=true"
+    call :grab "loras\wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors?download=true"
+    call :grab "text_encoders\umt5_xxl_fp8_e4m3fn_scaled.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors?download=true"
 )
 
 echo.
@@ -863,9 +981,6 @@ call :grab "ultralytics\segm\person_yolov8m-seg.pt" "https://huggingface.co/xing
 call :grab "text_encoders\llama_3.1_8b_instruct_fp8_scaled.safetensors" "%HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true"
 call :grab "clip_vision\sigclip_vision_patch14_384.safetensors" "%HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true"
 call :grab "clip\ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" "%HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true"
-call :grab "clip\clip_l.safetensors" "%HF_FLX_URL%/clip_l.safetensors?download=true"
-call :grab "vae_approx\taesd_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth"
-call :grab "vae_approx\taesd_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth"
 
 echo.
 echo %YELLOW%--- Cloning Repo-based Models (InsightFace, Florence, etc.)...%RESET%
@@ -952,14 +1067,14 @@ goto :main_menu_return
 :update_run_scripts
 echo.
 echo %BLUE%======================================================================%RESET%
-echo %BLUE%        Adding '--use-sage-attention --highvram' to Run Scripts       %RESET%
+echo %BLUE%                     Adding Updates to Run Scripts                    %RESET%
 echo %BLUE%======================================================================%RESET%
 echo.
 if not exist "%COMFYUI_DIR%" (
     echo %RED%ComfyUI directory not found.%RESET%
     goto :eof
 )
-set "TARGET_ARG=--use-sage-attention --highvram"
+set "TARGET_ARG=--use-sage-attention --highvram --dont-launch-browser"
 set "SEARCH_LINE=ComfyUI\main.py"
 
 for %%F in (run_nvidia_gpu.bat run_nvidia_gpu_fast_fp16_accumulation.bat) do (
