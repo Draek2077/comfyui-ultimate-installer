@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.1 (Server Manager Integration)
+:: Version: 2.2 (JoyCaption)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -225,6 +225,7 @@ set "NODE_URL_41=https://github.com/sipherxyz/comfyui-art-venture.git"
 set "NODE_URL_42=https://github.com/digitaljohn/comfyui-propost.git"
 set "NODE_URL_43=https://github.com/miaoshouai/ComfyUI-Miaoshouai-Tagger.git"
 set "NODE_URL_44=https://github.com/jags111/efficiency-nodes-comfyui.git"
+set "NODE_URL_45=https://github.com/fpgaminer/joycaption_comfyui.git"
 
 :: -----------------------------------------------------------------------------
 :: Section 2: Main Menu
@@ -985,8 +986,8 @@ call :grab "clip\ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" "
 echo.
 echo %YELLOW%--- Cloning Repo-based Models (InsightFace, Florence, etc.)...%RESET%
 if not exist "insightface" git clone %HF_BASE_URL%/insightface
-if not exist "LLM\Florence-2-base" git clone %HF_BASE_URL%/Florence-2-base LLM\Florence-2-base
-if not exist "LLM\Florence-2-large" git clone %HF_BASE_URL%/Florence-2-large LLM\Florence-2-large
+if not exist "llm\Florence-2-base" git clone %HF_BASE_URL%/Florence-2-base LLM\Florence-2-base
+if not exist "llm\Florence-2-large" git clone %HF_BASE_URL%/Florence-2-large LLM\Florence-2-large
 
 goto :eof
 
