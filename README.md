@@ -1,4 +1,4 @@
-Draekz ComfyUI Ultimate Installer
+# Draekz ComfyUI Ultimate Installer
 
 This installer aims to allow the installation of ComfyUI, with Sage Attention, Triton Windows, xFormers and all the accellerations enabled out of the box. It supports installing commonly used nodes, as well as multiple levels of quality of all of the best models available today.
 
