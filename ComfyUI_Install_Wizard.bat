@@ -225,7 +225,7 @@ set "NODE_URL_41=https://github.com/sipherxyz/comfyui-art-venture.git"
 set "NODE_URL_42=https://github.com/digitaljohn/comfyui-propost.git"
 set "NODE_URL_43=https://github.com/miaoshouai/ComfyUI-Miaoshouai-Tagger.git"
 set "NODE_URL_44=https://github.com/jags111/efficiency-nodes-comfyui.git"
-set "NODE_URL_45=https://github.com/fpgaminer/joycaption_comfyui.git"
+set "NODE_URL_45=https://github.com/1038lab/ComfyUI-JoyCaption.git"
 
 :: -----------------------------------------------------------------------------
 :: Section 2: Main Menu
