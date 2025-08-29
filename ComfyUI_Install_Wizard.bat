@@ -260,17 +260,17 @@ for /l %%G in (1,1,99) do (
 if not defined MODEL_STATUS_STRING set "MODEL_STATUS_STRING=%PURPLE% [None Selected]%RESET%"
 
 echo %YELLOW%[ Setup ^& Status ]%RESET%
+echo %WHITE%  0) Full Automatic Installation (All Models)%RESET%
 if "!INSTALL_SERVER_MANAGER!"=="1" (
-    echo %WHITE%  0^) Install Server Manager %GREEN%[X]%RESET%
+    echo %WHITE%  1^) Install Server Manager %GREEN%[X]%RESET%
 ) else (
-    echo %WHITE%  0^) Install Server Manager %RED%[ ]%RESET%
+    echo %WHITE%  1^) Install Server Manager %RED%[ ]%RESET%
 )
 if "!INSTALL_CLIENT_WRAPPER!"=="1" (
-    echo %WHITE%  1^) Install Client Wrapper %GREEN%[X]%RESET%
+    echo %WHITE%  2^) Install Client Wrapper %GREEN%[X]%RESET%
 ) else (
-    echo %WHITE%  1^) Install Client Wrapper %RED%[ ]%RESET%
+    echo %WHITE%  2^) Install Client Wrapper %RED%[ ]%RESET%
 )
-echo %WHITE%  2) Full Automatic Installation (All Models)%RESET%
 echo %WHITE%  3) Select Models...%GREEN%!MODEL_STATUS_STRING!%RESET%
 echo.
 echo %YELLOW%[ Core Installation ]%RESET%
@@ -294,9 +294,9 @@ if defined LAST_ACTION_MSG echo  Last Action: !LAST_ACTION_MSG!
 echo.
 set /p "main_choice=%WHITE%Enter your choice and press ENTER: %RESET%"
 
-if "%main_choice%"=="0" goto :toggle_server_manager
-if "%main_choice%"=="1" goto :toggle_client_wrapper
-if "%main_choice%"=="2" goto :full_install
+if "%main_choice%"=="0" goto :full_install
+if "%main_choice%"=="1" goto :toggle_server_manager
+if "%main_choice%"=="2" goto :toggle_client_wrapper
 if "%main_choice%"=="3" goto :model_selection_menu
 if "%main_choice%"=="4" goto :install_comfyui
 if "%main_choice%"=="5" goto :install_models
