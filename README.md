@@ -8,7 +8,7 @@ This installer aims to allow the installation of ComfyUI for NVIDIA on Windows (
 
 **Installer Menu:**
 
-<img width="1182" height="624" alt="image" src="https://github.com/user-attachments/assets/ca434751-e397-49ca-9c71-c12bd136d4d0" />
+<img width="2363" height="1244" alt="image" src="https://github.com/user-attachments/assets/3c789435-8579-4b9e-84b3-941c1e76582e" />
 
 I use the installation of ComfyUI 0.3.49 then automatically upgrades from there. The installer ensures a Python 3.12 environment and a full compatibility with all the nodes I install. It adds several customizations to initial ComfyUI configuration, as well as a convenient ComfyUI frontend launcher for the start menu.
 
