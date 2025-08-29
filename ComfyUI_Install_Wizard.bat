@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.2 (JoyCaption)
+:: Version: 2.3 (ClientWrapper)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -31,6 +31,7 @@ set "LAST_ACTION_MSG=!GREEN!Welcome, please select an option to begin.!RESET!"
 
 :: --- Toggles Options ---
 set "INSTALL_SERVER_MANAGER=0" :: Set to 1 to install, 0 to skip
+set "INSTALL_CLIENT_WRAPPER=0" :: Set to 1 to install, 0 to skip
 
 :: --- Core Configuration ---
 set "COMFYUI_DIR=ComfyUI_windows_portable"
@@ -45,8 +46,10 @@ set "SEVEN_VER=22.01"
 set "COMFY_RELEASE_URL=https://github.com/comfyanonymous/ComfyUI/releases/download/v%COMFY_VER%/ComfyUI_windows_portable_nvidia.7z"
 set "HF_BASE_URL=https://huggingface.co/Aitrepreneur"
 set "HF_FLX_URL=%HF_BASE_URL%/FLX/resolve/main"
-set "SERVER_MANAGER_URL=https://github.com/Draek2077/ComfyUI-Server-Manager/releases/download/v1.0/ComfyUIServerManagerInstaller.msi"
+set "SERVER_MANAGER_URL=https://github.com/Draek2077/comfyui-server-manager/releases/download/v1.0/ComfyUIServerManagerInstaller.msi"
 set "SERVER_MANAGER_MSI_NAME=ComfyUIServerManagerInstaller.msi"
+set "CLIENT_WRAPPER_URL=https://github.com/Draek2077/comfyui-client-wrapper/releases/download/v1.0/ComfyUIClientWrapperInstaller.msi"
+set "CLIENT_WRAPPER_MSI_NAME=ComfyUIClientWrapperInstaller.msi"
 
 :: --- Model Catalog Configuration ---
 :: To add/change models, edit this section. The menus will update automatically.
@@ -262,16 +265,20 @@ if "!INSTALL_SERVER_MANAGER!"=="1" (
 ) else (
     echo %WHITE%  0^) Install Server Manager %RED%[ ]%RESET%
 )
-echo %WHITE%  1) Full Automatic Installation (All Models)%RESET%
-echo %WHITE%  2) Select Models...%GREEN%!MODEL_STATUS_STRING!%RESET%
+if "!INSTALL_CLIENT_WRAPPER!"=="1" (
+    echo %WHITE%  1^) Install Client Wrapper %GREEN%[X]%RESET%
+) else (
+    echo %WHITE%  1^) Install Client Wrapper %RED%[ ]%RESET%
+)
+echo %WHITE%  2) Full Automatic Installation (All Models)%RESET%
+echo %WHITE%  3) Select Models...%GREEN%!MODEL_STATUS_STRING!%RESET%
 echo.
 echo %YELLOW%[ Core Installation ]%RESET%
-echo %WHITE%  3) Install ComfyUI%RESET%
-echo %WHITE%  4) Install SELECTED Models%RESET%
-echo %WHITE%  5) Install Custom Nodes%RESET%
+echo %WHITE%  4) Install ComfyUI%RESET%
+echo %WHITE%  5) Install SELECTED Models%RESET%
+echo %WHITE%  6) Install Custom Nodes%RESET%
 echo.
 echo %YELLOW%[ Supporting Modules ]%RESET%
-echo %WHITE%  6) Configure Settings ^& Shortcuts%RESET%
 echo %WHITE%  7) Install Triton ^& Sage Attention (+Enable Flag)%RESET%
 echo %WHITE%  8) Install Python Include/Libs for Triton%RESET%
 echo %WHITE%  9) Verify Full Installation%RESET%
@@ -288,12 +295,12 @@ echo.
 set /p "main_choice=%WHITE%Enter your choice and press ENTER: %RESET%"
 
 if "%main_choice%"=="0" goto :toggle_server_manager
-if "%main_choice%"=="1" goto :full_install
-if "%main_choice%"=="2" goto :model_selection_menu
-if "%main_choice%"=="3" goto :install_comfyui
-if "%main_choice%"=="4" goto :install_models
-if "%main_choice%"=="5" goto :install_nodes
-if "%main_choice%"=="6" goto :configure_comfyui
+if "%main_choice%"=="1" goto :toggle_client_wrapper
+if "%main_choice%"=="2" goto :full_install
+if "%main_choice%"=="3" goto :model_selection_menu
+if "%main_choice%"=="4" goto :install_comfyui
+if "%main_choice%"=="5" goto :install_models
+if "%main_choice%"=="6" goto :install_nodes
 if "%main_choice%"=="7" goto :install_triton_sage
 if "%main_choice%"=="8" goto :setup_python_libs
 if "%main_choice%"=="9" goto :verify_all
@@ -319,6 +326,17 @@ if "%INSTALL_SERVER_MANAGER%"=="1" (
 )
 goto :main_menu
 
+:: --- Toggle Client Wrapper ---
+:toggle_client_wrapper
+if "%INSTALL_CLIENT_WRAPPER%"=="1" (
+    set "INSTALL_CLIENT_WRAPPER=0"
+    set "LAST_ACTION_MSG=%GREEN%Client Wrapper installation DISABLED.%RESET%"
+) else (
+    set "INSTALL_CLIENT_WRAPPER=1"
+    set "LAST_ACTION_MSG=%GREEN%Client Wrapper installation ENABLED.%RESET%"
+)
+goto :main_menu
+
 :: --- Full Automated Install ---
 :full_install
 cls
@@ -328,6 +346,8 @@ echo %BLUE%               Starting Full Automated Installation                  
 echo %BLUE%======================================================================%RESET%
 echo %YELLOW%[INFO] Enabling Server Manager installation for Full Install mode.%RESET%
 set "INSTALL_SERVER_MANAGER=1"
+echo %YELLOW%[INFO] Enabling Client Wrapper installation for Full Install mode.%RESET%
+set "INSTALL_CLIENT_WRAPPER=1"
 call :auto_install_model_setup
 if "%AUTO_INSTALL_QUALITY%"=="" (
     set "LAST_ACTION_MSG=%PURPLE%Full installation was cancelled by user.%RESET%"
@@ -479,6 +499,7 @@ echo %GREEN%ComfyUI Core extracted successfully.%RESET%
 call :update_comfyui
 call :configure_comfyui
 call :install_server_manager
+call :install_client_wrapper
 set "LAST_ACTION_MSG=%GREEN%ComfyUI Core installed successfully.%RESET%"
 goto :main_menu_return
 
@@ -517,11 +538,11 @@ SET SERVER_SHORTCUT_NAME=ComfyUI Server.lnk
 SET CLIENT_SHORTCUT_NAME=ComfyUI Client.lnk
 SET EDGE_PATH=C:\Progra~2\Microsoft\Edge\Application\msedge.exe
 
-echo.
-echo %YELLOW%Creating Desktop and Start Menu shortcuts...%RESET%
-
-:: --- Create Shortcuts (only if Server Manager is NOT installed) ---
+:: --- Create Server Shortcuts (only if Server Manager is NOT installed) ---
 if "%INSTALL_SERVER_MANAGER%"=="0" (
+    echo.
+    echo %YELLOW%Creating Server Desktop and Start Menu shortcuts...%RESET%
+
     call :grab "%SERVER_ICON_FILE%" "https://github.com/Comfy-Org/desktop/raw/refs/heads/main/assets/UI/Comfy_Logo.ico"
 
     powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $DesktopPath = [Environment]::GetFolderPath('Desktop'); $ShortcutPath = Join-Path -Path $DesktopPath -ChildPath '%SERVER_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = 'C:\Windows\System32\cmd.exe'; $s.Arguments = '/c \"%TARGET_EXE%\"'; $s.WorkingDirectory = '%ABSOLUTE_COMFYUI_DIR%'; $s.IconLocation = '%SERVER_ICON_FILE%,0'; $s.WindowStyle = 7; $s.Save()"
@@ -531,10 +552,18 @@ if "%INSTALL_SERVER_MANAGER%"=="0" (
     echo %PURPLE%[INFO] Skipping server shortcut creation because the Server Manager is being installed.%RESET%
 )
 
-call :grab "%CLIENT_ICON_FILE%" "https://drive.usercontent.google.com/download?id=1ehBRfElOe-v-zHQTKoCRInkzL8HBtYBZ&export=download&authuser=0&confirm=t&uuid=bc713c44-c765-4a89-a212-1b2ba8016a15&at=AN8xHoqQo2CQKoir69Qmh2iGscvg:1756246657739"
+:: --- Create Client Shortcuts (only if Client Wrapper is NOT installed) ---
+if "%INSTALL_CLIENT_WRAPPER%"=="0" (
+    echo.
+    echo %YELLOW%Creating Client Desktop and Start Menu shortcuts...%RESET%
+    call :grab "%CLIENT_ICON_FILE%" "https://drive.usercontent.google.com/download?id=1ehBRfElOe-v-zHQTKoCRInkzL8HBtYBZ&export=download&authuser=0&confirm=t&uuid=bc713c44-c765-4a89-a212-1b2ba8016a15&at=AN8xHoqQo2CQKoir69Qmh2iGscvg:1756246657739"
 
-powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $DesktopPath = [Environment]::GetFolderPath('Desktop'); $ShortcutPath = Join-Path -Path $DesktopPath -ChildPath '%CLIENT_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = '%EDGE_PATH%'; $s.Arguments = '--app=%TARGET_URL%'; $s.IconLocation = '%CLIENT_ICON_FILE%'; $s.Save()"
-powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $StartMenuPath = [Environment]::GetFolderPath('Programs'); $ShortcutPath = Join-Path -Path $StartMenuPath -ChildPath '%CLIENT_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = '%EDGE_PATH%'; $s.Arguments = '--app=%TARGET_URL%'; $s.IconLocation = '%CLIENT_ICON_FILE%'; $s.Save()"
+    powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $DesktopPath = [Environment]::GetFolderPath('Desktop'); $ShortcutPath = Join-Path -Path $DesktopPath -ChildPath '%CLIENT_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = '%EDGE_PATH%'; $s.Arguments = '--app=%TARGET_URL%'; $s.IconLocation = '%CLIENT_ICON_FILE%'; $s.Save()"
+    powershell.exe -NoProfile -Command "$ws = New-Object -ComObject WScript.Shell; $StartMenuPath = [Environment]::GetFolderPath('Programs'); $ShortcutPath = Join-Path -Path $StartMenuPath -ChildPath '%CLIENT_SHORTCUT_NAME%'; $s = $ws.CreateShortcut($ShortcutPath); $s.TargetPath = '%EDGE_PATH%'; $s.Arguments = '--app=%TARGET_URL%'; $s.IconLocation = '%CLIENT_ICON_FILE%'; $s.Save()"
+) else (
+    echo.
+    echo %PURPLE%[INFO] Skipping server shortcut creation because the Server Manager is being installed.%RESET%
+)
 
 echo %GREEN%ComfyUI configuration complete!%RESET%
 echo.
@@ -564,6 +593,32 @@ echo %YELLOW%Starting Server Manager installation (will run in background)...%RE
 cmd /c start "MSI Installer" msiexec /i "%SERVER_MANAGER_MSI_NAME%" /qb
 
 echo %GREEN%Server Manager installation has been launched.%RESET%
+echo %PURPLE%You may need to approve a UAC prompt for the installation.%RESET%
+goto :eof
+
+:: --- Install Client Wrapper ---
+:install_client_wrapper
+if "%INSTALL_CLIENT_WRAPPER%"=="0" (
+    echo %PURPLE%[INFO] Skipping Client Wrapper installation as per user setting.%RESET%
+    goto :eof
+)
+echo.
+echo %BLUE%======================================================================%RESET%
+echo %BLUE%                 Installing ComfyUI Client Wrapper                    %RESET%
+echo %BLUE%======================================================================%RESET%
+echo.
+echo %YELLOW%Downloading Client Wrapper installer...%RESET%
+call :grab "%CLIENT_WRAPPER_MSI_NAME%" "%CLIENT_WRAPPER_URL%"
+if %errorlevel% neq 0 (
+    echo %RED%Client Wrapper download failed. Skipping installation.%RESET%
+    set "LAST_ACTION_MSG=%RED%Client Wrapper download failed.%RESET%"
+    goto :eof
+)
+
+echo %YELLOW%Starting Client Wrapper installation (will run in background)...%RESET%
+cmd /c start "MSI Installer" msiexec /i "%CLIENT_WRAPPER_MSI_NAME%" /qb
+
+echo %GREEN%Client Wrapper installation has been launched.%RESET%
 echo %PURPLE%You may need to approve a UAC prompt for the installation.%RESET%
 goto :eof
 
@@ -626,6 +681,7 @@ python.exe -m pip install https://github.com/nunchaku-tech/nunchaku/releases/dow
 echo %YELLOW%Cleaning up files...%RESET%
 del "!WHL_FILE!"
 del "%SERVER_MANAGER_MSI_NAME%"
+del "%CLIENT_WRAPPER_MSI_NAME%"
 
 popd
 echo %GREEN%Core Python packages installed.%RESET%
@@ -678,7 +734,7 @@ for /l %%G in (1,1,99) do (
     )
 )
 if "!models_were_selected!"=="false" (
-    echo %PURPLE%No models selected. Please use Option 2 from the main menu to select models first.%RESET%
+    echo %PURPLE%No models selected. Please use Option 3 from the main menu to select models first.%RESET%
     set "LAST_ACTION_MSG=%PURPLE%Model installation skipped: No models were selected.%RESET%"
     pause
     goto :main_menu
@@ -1177,7 +1233,7 @@ goto :eof
 
 :: --- Menu Return Helper ---
 :main_menu_return
-if "%main_choice%"=="1" (goto :eof) else (goto :main_menu)
+if "%main_choice%"=="2" (goto :eof) else (goto :main_menu)
 
 
 :: -----------------------------------------------------------------------------
