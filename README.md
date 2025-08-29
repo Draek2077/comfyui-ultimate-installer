@@ -10,9 +10,7 @@ This installer aims to allow the installation of ComfyUI for NVIDIA on Windows (
 
 <img width="2368" height="1241" alt="image" src="https://github.com/user-attachments/assets/fd55f8c3-b8ef-458c-9fbb-264baecf52d7" />
 
-I use the installation of ComfyUI 0.3.49 then automatically upgrades from there. The installer ensures a Python 3.12 environment and a full compatibility with all the nodes I install. It adds several customizations to initial ComfyUI configuration, as well as a convenient ComfyUI frontend launcher for the start menu.
-
-The ComfyUI Server Manager and Client Wrapper projects are also installed automatically if requested in the install process, and provide an easy-to-use set of windows applications to use ComfyUI's server/client architecture easily.
+I use the installation of ComfyUI 0.3.49 then automatically upgrades from there. The installer ensures a Python 3.12 environment and a full compatibility with all the nodes I install. It adds customizations to the initial ComfyUI configuration, as well as convenient launchers for the client and server. The Server Manager and Client Wrapper projects are also installed automatically if requested in the install process, and provide an easy-to-use set of windows applications to use ComfyUI. Either way, we will add shortcuts to access ComfyUI client and server whether you use the manager and wrapper or not.
 
 https://github.com/Draek2077/comfyui-server-manager
 https://github.com/Draek2077/comfyui-client-wrapper
