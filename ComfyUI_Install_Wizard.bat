@@ -46,9 +46,9 @@ set "SEVEN_VER=22.01"
 set "COMFY_RELEASE_URL=https://github.com/comfyanonymous/ComfyUI/releases/download/v%COMFY_VER%/ComfyUI_windows_portable_nvidia.7z"
 set "HF_BASE_URL=https://huggingface.co/Aitrepreneur"
 set "HF_FLX_URL=%HF_BASE_URL%/FLX/resolve/main"
-set "SERVER_MANAGER_URL=https://github.com/Draek2077/comfyui-server-manager/releases/download/v1.0/ComfyUIServerManagerInstaller.msi"
+set "SERVER_MANAGER_URL=https://github.com/Draek2077/comfyui-server-manager/releases/download/v1.0.1/ComfyUIServerManagerInstaller.msi"
 set "SERVER_MANAGER_MSI_NAME=ComfyUIServerManagerInstaller.msi"
-set "CLIENT_WRAPPER_URL=https://github.com/Draek2077/comfyui-client-wrapper/releases/download/v1.0/ComfyUIClientWrapperInstaller.msi"
+set "CLIENT_WRAPPER_URL=https://github.com/Draek2077/comfyui-client-wrapper/releases/download/v1.0.1/ComfyUIClientWrapperInstaller.msi"
 set "CLIENT_WRAPPER_MSI_NAME=ComfyUIClientWrapperInstaller.msi"
 
 :: --- Model Catalog Configuration ---
@@ -146,8 +146,8 @@ set "MODEL_15_NAME=WAN2.1-Vace"
 set "MODEL_15_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"        & set "MODEL_15_OPT_1_FILE=Wan2.1-VACE-15B-Q4_K_S.gguf"            & set "MODEL_15_OPT_1_TYPE=gguf"
 set "MODEL_15_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_15_OPT_2_FILE=Wan2.1-VACE-15B-Q5_K_S.gguf"            & set "MODEL_15_OPT_2_TYPE=gguf"
 set "MODEL_15_OPT_3_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_15_OPT_3_FILE=Wan2.1-VACE-15B-Q8_0.gguf"              & set "MODEL_15_OPT_3_TYPE=gguf"
-set "MODEL_15_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_15_OPT_4_FILE=wan2.1_vace_15B_fp8_e4m3fn.safetensors" & set "MODEL_15_OPT_4_TYPE=diffusion_model" & set "MODEL_15_OPT_4_URL=https://huggingface.co/Kamikaze-88/Wan2.1-VACE-15B-fp8/resolve/main/wan2.1_vace_15B_fp8_e4m3fn.safetensors?download=true"
-set "MODEL_15_OPT_5_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_15_OPT_5_FILE=wan2.1_vace_15B_fp16.safetensors"       & set "MODEL_15_OPT_5_TYPE=diffusion_model" & set "MODEL_15_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_vace_15B_fp16.safetensors?download=true"
+set "MODEL_15_OPT_4_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_15_OPT_4_FILE=wan2.1_vace_15B_fp8_e4m3fn.safetensors" & set "MODEL_15_OPT_4_TYPE=diffusion_model" & set "MODEL_15_OPT_4_URL=https://huggingface.co/spacepxl/Wan2.1_VACE_14B_fp8_scaled/resolve/main/wan2.1_vace_14B_fp8_scaled.safetensors?download=true"
+set "MODEL_15_OPT_5_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_15_OPT_5_FILE=wan2.1_vace_15B_fp16.safetensors"       & set "MODEL_15_OPT_5_TYPE=diffusion_model" & set "MODEL_15_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/diffusion_models/wan2.1_vace_14B_fp16.safetensors?download=true"
 :: Model 16: WAN2.2I2VL
 set "MODEL_16_NAME=WAN2.2-I2V-L"
 set "MODEL_16_OPT_1_NAME=Low Q4_K_S  (GGUF, <12GB VRAM)"        & set "MODEL_16_OPT_1_FILE=Wan2.2-I2V-A14B-LowNoise-Q4_K_S.gguf"            & set "MODEL_16_OPT_1_TYPE=gguf"
@@ -229,6 +229,8 @@ set "NODE_URL_42=https://github.com/digitaljohn/comfyui-propost.git"
 set "NODE_URL_43=https://github.com/miaoshouai/ComfyUI-Miaoshouai-Tagger.git"
 set "NODE_URL_44=https://github.com/jags111/efficiency-nodes-comfyui.git"
 set "NODE_URL_45=https://github.com/1038lab/ComfyUI-JoyCaption.git"
+set "NODE_URL_46=https://github.com/fairy-root/Flux-Prompt-Generator"
+set "NODE_URL_47=https://github.com/marduk191/ComfyUI-Fluxpromptenhancer"
 
 :: -----------------------------------------------------------------------------
 :: Section 2: Main Menu
@@ -677,6 +679,7 @@ python.exe -m pip uninstall -y opencv-python opencv-python-headless
 python.exe -m pip install opencv-python opencv-python-headless
 python.exe -m pip install xformers torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu128
 python.exe -m pip install https://github.com/nunchaku-tech/nunchaku/releases/download/v1.0.0dev20250823/nunchaku-1.0.0.dev20250823+torch2.8-cp312-cp312-win_amd64.whl
+python.exe -m pip install https://github.com/eswarthammana/llama-cpp-wheels/releases/download/v0.3.16/llama_cpp_python-0.3.16-cp312-cp312-win_amd64.whl
 
 echo %YELLOW%Cleaning up files...%RESET%
 del "!WHL_FILE!"
@@ -1001,6 +1004,7 @@ if defined FLAG_WAN21_SELECTED (
     call :grab "loras\Wan2.1_T2V_14B_FusionX_LoRA.safetensors" "%HF_FLX_URL%/Wan2.1_T2V_14B_FusionX_LoRA.safetensors?download=true"
     call :grab "loras\Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors" "%HF_FLX_URL%/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors?download=true"
     call :grab "vae\ae.safetensors" "%HF_FLX_URL%/ae.safetensors?download=true"
+    call :grab "clip_vision\clip_vision_h.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors?download=true"
 )
 
 :: --- WAN 2.2 Models ---
@@ -1038,6 +1042,7 @@ call :grab "ultralytics\segm\person_yolov8m-seg.pt" "https://huggingface.co/xing
 call :grab "text_encoders\llama_3.1_8b_instruct_fp8_scaled.safetensors" "%HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true"
 call :grab "clip_vision\sigclip_vision_patch14_384.safetensors" "%HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true"
 call :grab "clip\ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" "%HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true"
+call :grab "llm_gguf\Hermes-3-Llama-3.1-8B.Q8_0.gguf" "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true"
 
 echo.
 echo %YELLOW%--- Cloning Repo-based Models (InsightFace, Florence, etc.)...%RESET%
