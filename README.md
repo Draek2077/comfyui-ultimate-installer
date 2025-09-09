@@ -6,6 +6,8 @@ This installer aims to allow the installation of ComfyUI for NVIDIA on Windows (
 
 **It currently supports: SD1.5, SDXL, SD3.5, HiDream, Flux Dev, Flux Kontext, Qwen Image, Qwen Image Edit, WAN 2.1 and WAN 2.2** and it attempts to let you choose your VRAM levels to install the appropriate models for the best quality for your hardware. It also installs all related models one would need for a variety of tasks. It leverages Huggingface to download all of the models, and github to download all of the nodes.
 
+_NOTE: I am currently working on an update that will separate out safetensors vs GGUF cleanly and give more model options across the board. And I will be updating the workflows as well._
+
 My nodes and workflows are also automatically included from these projects:
 
 https://github.com/Draek2077/comfyui-draekz-nodez
