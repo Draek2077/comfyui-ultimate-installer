@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.9.1 (Return-to-Menu Fix)
+:: Version: 2.9.5 (Robust Echo Fix)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -412,7 +412,7 @@ call :setup_python_libs
 call :install_triton_sage
 echo.
 echo %GREEN%======================================================================%RESET%
-echo %GREEN%           [V] Full Installation Complete!                            %RESET%
+echo %GREEN%           [X] Full Installation Complete!                            %RESET%
 echo %GREEN%======================================================================%RESET%
 echo.
 set "LAST_ACTION_MSG=%GREEN%Full Installation completed successfully!%RESET%"
@@ -539,7 +539,11 @@ if defined is_valid (
     if "%quality_choice%"=="6" set "SELECTED_QUALITY_NAME=Full SafeTensors"
 
     call :set_models_by_quality %quality_choice%
-    set "LAST_ACTION_MSG=%GREEN%Model selections and quality are now set.%RESET%"
+    echo.
+    echo %YELLOW%Selections set. Automatically running verification...%RESET%
+    timeout /t 2 >nul
+    call :verify_all
+    set "LAST_ACTION_MSG=%GREEN%Model selections set and verification complete.%RESET%"
     goto :main_menu
 ) else (
     echo %RED%Invalid selection. Please try again.%RESET%
@@ -971,7 +975,8 @@ for /l %%G in (1,1,99) do (
                 call set "FILETYPE=%%MODEL_!num!_OPT_%%I_TYPE%%"
                 call set "DOWNLOAD_URL=%%MODEL_!num!_OPT_%%I_URL%%"
 
-                echo %YELLOW%Downloading !MODEL_NAME! (!FILENAME!^)...%RESET%
+                set "display_msg=!YELLOW!Downloading !MODEL_NAME!...%RESET%"
+                for /f "delims=" %%p in ("!display_msg!") do echo(%%p
 
                 if "!FILETYPE!"=="gguf" (
                     call :grab "unet\!FILENAME!" "!DOWNLOAD_URL!"
@@ -1287,7 +1292,6 @@ echo %GREEN%                       Verification Complete                        
 echo %GREEN%======================================================================%RESET%
 echo.
 set "LAST_ACTION_MSG=%GREEN%Full verification process complete. Status checkmarks updated.%RESET%"
-pause
 goto :main_menu
 
 :verify_prereqs
@@ -1538,16 +1542,35 @@ for %%F in ("%DEST_PATH%") do set "FILENAME=%%~nxF" & set "DIR_PATH=%%~dpF"
 if not exist "!DIR_PATH!" mkdir "!DIR_PATH!"
 if exist "%DEST_PATH%" (
     echo %PURPLE%[SKIP] %FILENAME% already exists.%RESET%
-) else (
-    echo %YELLOW%  Downloading %FILENAME%...%RESET%
-    curl -# -L -o "%DEST_PATH%" "%DOWNLOAD_URL%" --ssl-no-revoke
-    if !errorlevel! neq 0 (
-        echo %RED%[ERROR] Download failed for %FILENAME%.%RESET%
-        del "%DEST_PATH%" 2>nul
-        exit /b 1
-    )
+    exit /b 0
 )
-exit /b 0
+
+set "MAX_RETRIES=3"
+set "RETRY_COUNT=0"
+
+:grab_loop
+set /a RETRY_COUNT+=1
+if !RETRY_COUNT! gtr 1 (
+    <nul set /p "=%YELLOW%  Retrying download (!RETRY_COUNT!/%MAX_RETRIES%)...%RESET%"
+    echo.
+    timeout /t 3 >nul
+) else (
+    <nul set /p "=%YELLOW%  Downloading !FILENAME!...%RESET%"
+    echo.
+)
+
+curl -# -L -o "%DEST_PATH%" "%DOWNLOAD_URL%" --ssl-no-revoke
+if !errorlevel! equ 0 (
+    exit /b 0
+)
+
+if !RETRY_COUNT! lss %MAX_RETRIES% (
+    goto :grab_loop
+)
+
+echo %RED%[ERROR] Download failed for %FILENAME% after %MAX_RETRIES% attempts.%RESET%
+del "%DEST_PATH%" 2>nul
+exit /b 1
 
 :: -----------------------------------------------------------------------------
 :: Section 5: Exit
@@ -1561,9 +1584,6 @@ echo %BLUE%=====================================================================
 echo.
 timeout /t 2 >nul
 exit
-
-
-
 
 
 
