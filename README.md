@@ -4,9 +4,7 @@ _NOTE: I have no relation or connection to the ComfyUI team. This is a personal 
 
 This installer aims to allow the installation of ComfyUI for NVIDIA on Windows (including Sage Attention, Triton Windows, xFormers) and all the accelerations enabled out of the box. It supports installing commonly used nodes, as well as multiple levels of quality of all the best models available today.
 
-**It currently supports: SD1.5, SDXL, SD3.5, HiDream, Flux Dev, Flux Kontext, Qwen Image, Qwen Image Edit, WAN 2.1 and WAN 2.2** and it attempts to let you choose your VRAM levels to install the appropriate models for the best quality for your hardware. It also installs all related models one would need for a variety of tasks. It leverages Huggingface to download all of the models, and github to download all of the nodes.
-
-_NOTE: I am currently working on an update that will separate out safetensors vs GGUF cleanly and give more model options across the board. And I will be updating the workflows as well._
+**It currently supports: SD1.5, SDXL, SD3.5, HiDream, Flux Dev, Flux Schnell, Flux Kontext, Qwen Image, Qwen Image Edit, WAN 2.1/2.2 (Including FusionX and Vace)** and it attempts to let you choose your VRAM levels to install the appropriate models for the best quality for your hardware. It also installs all related models one would need for a variety of tasks. It leverages Huggingface to download all of the models, and github to download all of the nodes.
 
 My nodes and workflows are also automatically included from these projects:
 
@@ -16,7 +14,7 @@ https://github.com/Draek2077/comfyui-draekz-workflowz
 
 **Installer Menu:**
 
-<img width="2368" height="1241" alt="image" src="https://github.com/user-attachments/assets/fd55f8c3-b8ef-458c-9fbb-264baecf52d7" />
+<img width="1333" height="957" alt="image" src="https://github.com/user-attachments/assets/5bad03a6-8b66-4bc5-b574-95c9d1121790" />
 
 I use the installation of ComfyUI 0.3.49 then automatically upgrades from there. The installer ensures a Python 3.12 environment and a full compatibility with all the nodes I install. It adds customizations to the initial ComfyUI configuration, as well as convenient launchers for the client and server. The Server Manager and Client Wrapper projects are also installed automatically if requested in the install process, and provide an easy-to-use set of windows applications to use ComfyUI. Either way, we will add shortcuts to access ComfyUI client and server whether you use the manager and wrapper or not.
 
