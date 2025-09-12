@@ -85,7 +85,7 @@ set "MODEL_02_OPT_2_NAME=Q5_K_S (GGUF, 12-16GB VRAM)"      & set "MODEL_02_OPT_2
 set "MODEL_02_OPT_3_NAME=Q6_K   (GGUF, ~16GB VRAM)"        & set "MODEL_02_OPT_3_FILE=flux1-schnell-Q6_K.gguf"       & set "MODEL_02_OPT_3_TYPE=gguf" & set "MODEL_02_OPT_3_URL=https://huggingface.co/city96/FLUX.1-schnell-gguf/resolve/main/flux1-schnell-Q6_K.gguf?download=true"
 set "MODEL_02_OPT_4_NAME=Q8_0   (GGUF, >16GB VRAM)"        & set "MODEL_02_OPT_4_FILE=flux1-schnell-Q8_0.gguf"       & set "MODEL_02_OPT_4_TYPE=gguf" & set "MODEL_02_OPT_4_URL=%HF_FLX_URL%/flux1-schnell-Q8_0.gguf"
 set "MODEL_02_OPT_5_NAME=FP8    (Safetensors, >24GB VRAM)" & set "MODEL_02_OPT_5_FILE=flux1-schnell-fp8.safetensors" & set "MODEL_02_OPT_5_TYPE=diffusion_model" & set "MODEL_02_OPT_5_URL=%HF_FLX_URL%/flux1-schnell-fp8.safetensors"
-set "MODEL_02_OPT_6_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_02_OPT_6_FILE=flux1-schnell.safetensors"     & set "MODEL_02_OPT_6_TYPE=diffusion_model" & set "MODEL_02_OPT_6_URL=https://huggingface.co/black-forest-labs/FLUX.1-schnell/resolve/main/flux1-schnell.safetensors?download=true"
+set "MODEL_02_OPT_6_NAME=FP16   (Safetensors, >32GB VRAM)" & set "MODEL_02_OPT_6_FILE=flux1-schnell.safetensors"     & set "MODEL_02_OPT_6_TYPE=diffusion_model" & set "MODEL_02_OPT_6_URL=https://huggingface.co/OlafCC/flux1-schnell.safetensors/resolve/main/flux1-schnell.safetensors?download=true"
 :: Model 3: FLUX Kontext
 set "MODEL_03_NAME=FLUX-Kontext"
 set "MODEL_03_OPT_1_NAME=Q4_K_S (GGUF, <12GB VRAM)"       & set "MODEL_03_OPT_1_FILE=flux1-kontext-dev-Q4_K_S.gguf"            & set "MODEL_03_OPT_1_TYPE=gguf" & set "MODEL_03_OPT_1_URL=%HF_FLX_URL%/flux1-kontext-dev-Q4_K_S.gguf"
@@ -1035,7 +1035,7 @@ if defined FLAG_FLUX_SELECTED (
     call :grab "xlabs\controlnets\flux-hed-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true"
     call :grab "clip_vision\model.safetensors" "https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true"
     call :grab "style_models\flux1-redux-dev.safetensors" "https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true"
-    call :grab "diffusion_models\flux1-fill-dev.safetensors" "https://huggingface.co/black-forest-labs/FLUX.1-Fill-dev/blob/main/flux1-fill-dev.safetensors?download=true"
+    call :grab "diffusion_models\flux1-fill-dev.safetensors" "https://huggingface.co/second-state/FLUX.1-Fill-dev-GGUF/resolve/main/flux1-fill-dev.safetensors?download=true"
     call :grab "vae_approx\taef1_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taef1_decoder.pth"
     call :grab "vae_approx\taef1_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taef1_encoder.pth"
 )
@@ -1129,7 +1129,7 @@ call :grab "upscale_models\RealESRGAN_x2.pth" "https://huggingface.co/ai-forever
 call :grab "upscale_models\RealESRGAN_x4.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true"
 call :grab "upscale_models\RealESRGAN_x8.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true"
 call :grab "upscale_models\RealESRGAN_x4plus_anime_6B.pth" "%HF_FLX_URL%/RealESRGAN_x4plus_anime_6B.pth?download=true"
-call :grab "upscale_models\4x_NMKD-Siax_200k.pth" "https://huggingface.co/uwg/upscaler/blob/main/ESRGAN/4x_NMKD-Siax_200k.pth"
+call :grab "upscale_models\4x_NMKD-Siax_200k.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Siax_200k.pth"
 call :grab "upscale_models\4x_foolhardy_Remacri.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_foolhardy_Remacri.pth?download=true"
 call :grab "upscale_models\4x_NMKD-Superscale-SP_178000_G.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Superscale-SP_178000_G.pth?download=true"
 call :grab "upscale_models\4xNomos8kDAT.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4xNomos8kDAT.pth?download=true"
@@ -1540,10 +1540,7 @@ set "DEST_PATH=%~1"
 set "DOWNLOAD_URL=%~2"
 for %%F in ("%DEST_PATH%") do set "FILENAME=%%~nxF" & set "DIR_PATH=%%~dpF"
 if not exist "!DIR_PATH!" mkdir "!DIR_PATH!"
-if exist "%DEST_PATH%" (
-    echo %PURPLE%[SKIP] %FILENAME% already exists.%RESET%
-    exit /b 0
-)
+
 
 set "MAX_RETRIES=3"
 set "RETRY_COUNT=0"
@@ -1555,11 +1552,15 @@ if !RETRY_COUNT! gtr 1 (
     echo.
     timeout /t 3 >nul
 ) else (
-    <nul set /p "=%YELLOW%  Downloading !FILENAME!...%RESET%"
+    if exist "%DEST_PATH%" (
+        <nul set /p "=%PURPLE%  Resuming !FILENAME!...%RESET%"
+    ) else (
+        <nul set /p "=%GREEN%  Downloading !FILENAME!...%RESET%"
+    )
     echo.
 )
 
-curl -# -L -o "%DEST_PATH%" "%DOWNLOAD_URL%" --ssl-no-revoke
+curl -C - -# -L -o "%DEST_PATH%" "%DOWNLOAD_URL%" --ssl-no-revoke
 if !errorlevel! equ 0 (
     exit /b 0
 )
