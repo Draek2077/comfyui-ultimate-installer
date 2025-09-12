@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.9.6 (Model Fallback Fix)
+:: Version: 2.9.7 (Auto Verification)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -269,6 +269,9 @@ set "NODE_URL_45=https://github.com/1038lab/ComfyUI-JoyCaption.git"
 set "NODE_URL_46=https://github.com/fairy-root/Flux-Prompt-Generator"
 set "NODE_URL_47=https://github.com/marduk191/ComfyUI-Fluxpromptenhancer"
 set "NODE_URL_48=https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch"
+
+:: Run initial verification silently to check for existing components
+call :silent_verify_all
 
 :: -----------------------------------------------------------------------------
 :: Section 2: Main Menu
@@ -548,7 +551,7 @@ if defined is_valid (
     echo.
     echo %YELLOW%Selections set. Automatically running verification...%RESET%
     timeout /t 2 >nul
-    call :verify_all
+    call :silent_verify_all
     set "LAST_ACTION_MSG=%GREEN%Model selections set and verification complete.%RESET%"
     goto :main_menu
 ) else (
@@ -927,6 +930,7 @@ if "!models_were_selected!"=="false" (
     goto :main_menu
 )
 call :download_selected_models
+call :silent_verify_all
 goto :main_menu_return
 
 :download_selected_models
@@ -1020,7 +1024,7 @@ popd
 echo %GREEN%Model download process complete.%RESET%
 set "LAST_ACTION_MSG=%GREEN%Selected models were downloaded successfully.%RESET%"
 set "STATUS_MODELS=1"
-goto :main_menu_return
+goto :eof
 
 :download_shared_models
 echo.
@@ -1285,6 +1289,15 @@ for %%F in (run_nvidia_gpu.bat run_nvidia_gpu_fast_fp16_accumulation.bat) do (
 goto :eof
 
 :: --- Verification Routines ---
+:silent_verify_all
+call :verify_prereqs >nul 2>&1
+call :verify_comfyui >nul 2>&1
+call :verify_nodes >nul 2>&1
+call :verify_models >nul 2>&1
+call :verify_python_packages >nul 2>&1
+call :verify_run_scripts >nul 2>&1
+goto :eof
+
 :verify_all
 echo.
 echo %BLUE%======================================================================%RESET%
@@ -1596,6 +1609,3 @@ echo %BLUE%=====================================================================
 echo.
 timeout /t 2 >nul
 exit
-
-
-
