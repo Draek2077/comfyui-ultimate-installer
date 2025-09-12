@@ -16,7 +16,7 @@ https://github.com/Draek2077/comfyui-draekz-workflowz
 
 **Installer Menu:**
 
-<img width="1333" height="957" alt="image" src="https://github.com/user-attachments/assets/5bad03a6-8b66-4bc5-b574-95c9d1121790" />
+<img width="1333" height="957" alt="image" src="https://github.com/user-attachments/assets/41517804-098a-4b3c-bd2a-08d63e957886" />
 
 I use the installation of ComfyUI 0.3.49 then automatically upgrades from there. The installer ensures a Python 3.12 environment and a full compatibility with all the nodes I install. It adds customizations to the initial ComfyUI configuration, as well as convenient launchers for the client and server. The Server Manager and Client Wrapper projects are also installed automatically if requested in the install process, and provide an easy-to-use set of windows applications to use ComfyUI. Either way, we will add shortcuts to access ComfyUI client and server whether you use the manager and wrapper or not.
 
