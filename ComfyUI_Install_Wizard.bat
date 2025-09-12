@@ -40,7 +40,7 @@ set "SELECTED_QUALITY_NAME=None"
 :: --- Size Calculation Variables ---
 set "SIZE_COMFYUI_GB=6.5"
 set "SIZE_MODELS_GB=0.0"
-set "SIZE_TOTAL_GB=6.5"
+set "SIZE_TOTAL_GB=0.0"
 
 :: --- Model Selection Flags ---
 for /l %%G in (1,1,99) do (
@@ -225,6 +225,104 @@ set "MODEL_21_OPT_3_NAME=Q6_K    (GGUF, ~16GB VRAM)"        & set "MODEL_21_OPT_
 set "MODEL_21_OPT_4_NAME=Q8_0    (GGUF, >16GB VRAM)"        & set "MODEL_21_OPT_4_FILE=Wan2.2-TI2V-5B-Q8_0.gguf"        & set "MODEL_21_OPT_4_TYPE=gguf" & set "MODEL_21_OPT_4_URL=%HF_FLX_URL%/Wan2.2-TI2V-5B-Q8_0.gguf"
 set "MODEL_21_OPT_5_NAME=FP16    (Safetensors, >32GB VRAM)" & set "MODEL_21_OPT_5_FILE=wan2.2_ti2v_5B_fp16.safetensors" & set "MODEL_21_OPT_5_TYPE=diffusion_model" & set "MODEL_21_OPT_5_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors?download=true"
 
+:: --- Shared/Extra Model Configuration ---
+:: This is the single source of truth for all supporting models.
+:: FLAG: The model family this file depends on (e.g., FLUX, SD3). Use "ALWAYS" for files that should always be downloaded.
+:: PATH: The subdirectory within the 'models' folder (e.g., vae, upscale_models).
+:: FILE: The filename.
+:: URL:  The direct download URL.
+:: ---
+:: --- FLUX Extras (17) ---
+set "EXTRA_001_FLAG=FLUX"   & set "EXTRA_001_PATH=diffusion_models" & set "EXTRA_001_FILE=svdq-fp4_r32-flux.1-kontext-dev.safetensors" & set "EXTRA_001_URL=%HF_FLX_URL%/svdq-fp4_r32-flux.1-kontext-dev.safetensors?download=true"
+set "EXTRA_002_FLAG=FLUX"   & set "EXTRA_002_PATH=diffusion_models" & set "EXTRA_002_FILE=svdq-int4_r32-flux.1-kontext-dev.safetensors" & set "EXTRA_002_URL=%HF_FLX_URL%/svdq-int4_r32-flux.1-kontext-dev.safetensors?download=true"
+set "EXTRA_003_FLAG=FLUX"   & set "EXTRA_003_PATH=text_encoders"    & set "EXTRA_003_FILE=umt5-xxl-encoder-Q5_K_S.gguf"              & set "EXTRA_003_URL=%HF_FLX_URL%/umt5-xxl-encoder-Q5_K_S.gguf?download=true"
+set "EXTRA_004_FLAG=FLUX"   & set "EXTRA_004_PATH=text_encoders"    & set "EXTRA_004_FILE=t5xxl_fp16.safetensors"                   & set "EXTRA_004_URL=%HF_FLX_URL%/t5xxl_fp16.safetensors?download=true"
+set "EXTRA_005_FLAG=FLUX"   & set "EXTRA_005_PATH=text_encoders"    & set "EXTRA_005_FILE=t5xxl_fp8_e4m3fn.safetensors"             & set "EXTRA_005_URL=%HF_FLX_URL%/t5xxl_fp8_e4m3fn.safetensors?download=true"
+set "EXTRA_006_FLAG=FLUX"   & set "EXTRA_006_PATH=text_encoders"    & set "EXTRA_006_FILE=t5xxl_fp8_e4m3fn_scaled.safetensors"      & set "EXTRA_006_URL=%HF_FLX_URL%/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true"
+set "EXTRA_007_FLAG=FLUX"   & set "EXTRA_007_PATH=pulid"            & set "EXTRA_007_FILE=pulid_flux_v0.9.1.safetensors"            & set "EXTRA_007_URL=https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors?download=true"
+set "EXTRA_008_FLAG=FLUX"   & set "EXTRA_008_PATH=controlnet"       & set "EXTRA_008_FILE=FLUX1-dev-ControlNet-Union-Pro.safetensors" & set "EXTRA_008_URL=%HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true"
+set "EXTRA_009_FLAG=FLUX"   & set "EXTRA_009_PATH=controlnet"       & set "EXTRA_009_FILE=FLUX1-dev-ControlNet-Depth.safetensors"     & set "EXTRA_009_URL=https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Depth/resolve/main/diffusion_pytorch_model.safetensors?download=true"
+set "EXTRA_010_FLAG=FLUX"   & set "EXTRA_010_PATH=xlabs\ipadapters" & set "EXTRA_010_FILE=ip_adapter.safetensors"                   & set "EXTRA_010_URL=https://huggingface.co/XLabs-AI/flux-ip-adapter-v2/resolve/main/ip_adapter.safetensors?download=true"
+set "EXTRA_011_FLAG=FLUX"   & set "EXTRA_011_PATH=xlabs\controlnets"& set "EXTRA_011_FILE=flux-canny-controlnet-v3.safetensors"       & set "EXTRA_011_URL=https://huggingface.co/XLabs-AI/flux-controlnet-canny-v3/resolve/main/flux-canny-controlnet-v3.safetensors?download=true"
+set "EXTRA_012_FLAG=FLUX"   & set "EXTRA_012_PATH=xlabs\controlnets"& set "EXTRA_012_FILE=flux-depth-controlnet-v3.safetensors"       & set "EXTRA_012_URL=https://huggingface.co/XLabs-AI/flux-controlnet-depth-v3/resolve/main/flux-depth-controlnet-v3.safetensors?download=true"
+set "EXTRA_013_FLAG=FLUX"   & set "EXTRA_013_PATH=xlabs\controlnets"& set "EXTRA_013_FILE=flux-hed-controlnet-v3.safetensors"         & set "EXTRA_013_URL=https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true"
+set "EXTRA_014_FLAG=FLUX"   & set "EXTRA_014_PATH=clip_vision"      & set "EXTRA_014_FILE=model.safetensors"                        & set "EXTRA_014_URL=https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true"
+set "EXTRA_015_FLAG=FLUX"   & set "EXTRA_015_PATH=style_models"     & set "EXTRA_015_FILE=flux1-redux-dev.safetensors"              & set "EXTRA_015_URL=https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true"
+set "EXTRA_016_FLAG=FLUX"   & set "EXTRA_016_PATH=vae_approx"       & set "EXTRA_016_FILE=taef1_decoder.pth"                        & set "EXTRA_016_URL=https://github.com/madebyollin/taesd/raw/main/taef1_decoder.pth"
+set "EXTRA_017_FLAG=FLUX"   & set "EXTRA_017_PATH=vae_approx"       & set "EXTRA_017_FILE=taef1_encoder.pth"                        & set "EXTRA_017_URL=https://github.com/madebyollin/taesd/raw/main/taef1_encoder.pth"
+:: --- QWEN Extras (10) ---
+set "EXTRA_018_FLAG=QWEN"   & set "EXTRA_018_PATH=text_encoders"    & set "EXTRA_018_FILE=Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf"    & set "EXTRA_018_URL=%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf?download=true"
+set "EXTRA_019_FLAG=QWEN"   & set "EXTRA_019_PATH=text_encoders"    & set "EXTRA_019_FILE=Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf"   & set "EXTRA_019_URL=%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true"
+set "EXTRA_020_FLAG=QWEN"   & set "EXTRA_020_PATH=text_encoders"    & set "EXTRA_020_FILE=Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf"    & set "EXTRA_020_URL=%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf?download=true"
+set "EXTRA_021_FLAG=QWEN"   & set "EXTRA_021_PATH=text_encoders"    & set "EXTRA_021_FILE=Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf"      & set "EXTRA_021_URL=%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf?download=true"
+set "EXTRA_022_FLAG=QWEN"   & set "EXTRA_022_PATH=text_encoders"    & set "EXTRA_022_FILE=Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf" & set "EXTRA_022_URL=%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf?download=true"
+set "EXTRA_023_FLAG=QWEN"   & set "EXTRA_023_PATH=text_encoders"    & set "EXTRA_023_FILE=qwen_2.5_vl_7b_fp8_scaled.safetensors"      & set "EXTRA_023_URL=https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true"
+set "EXTRA_024_FLAG=QWEN"   & set "EXTRA_024_PATH=vae"              & set "EXTRA_024_FILE=qwen_image_vae.safetensors"               & set "EXTRA_024_URL=%HF_FLX_URL%/qwen_image_vae.safetensors?download=true"
+set "EXTRA_025_FLAG=QWEN"   & set "EXTRA_025_PATH=loras"            & set "EXTRA_025_FILE=Qwen-Image-Lightning-8steps-V1.0.safetensors" & set "EXTRA_025_URL=https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.0.safetensors?download=true"
+set "EXTRA_026_FLAG=QWEN"   & set "EXTRA_026_PATH=loras"            & set "EXTRA_026_FILE=Qwen-Image-Lightning-4steps-V1.0.safetensors" & set "EXTRA_026_URL=https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-4steps-V1.0.safetensors?download=true"
+set "EXTRA_027_FLAG=QWEN"   & set "EXTRA_027_PATH=loras"            & set "EXTRA_027_FILE=qwen_image_union_diffsynth_lora.safetensors"& set "EXTRA_027_URL=https://huggingface.co/Comfy-Org/Qwen-Image-DiffSynth-ControlNets/resolve/main/split_files/loras/qwen_image_union_diffsynth_lora.safetensors?download=true"
+:: --- HIDREAM Extras (2) ---
+set "EXTRA_028_FLAG=HIDREAM"& set "EXTRA_028_PATH=text_encoders"    & set "EXTRA_028_FILE=clip_g_hidream.safetensors"               & set "EXTRA_028_URL=%HF_FLX_URL%/clip_g_hidream.safetensors?download=true"
+set "EXTRA_029_FLAG=HIDREAM"& set "EXTRA_029_PATH=text_encoders"    & set "EXTRA_029_FILE=clip_l_hidream.safetensors"               & set "EXTRA_029_URL=%HF_FLX_URL%/clip_l_hidream.safetensors?download=true"
+:: --- SD1.5 Extras (2) ---
+set "EXTRA_030_FLAG=SD15"   & set "EXTRA_030_PATH=vae_approx"       & set "EXTRA_030_FILE=taesd_decoder.pth"                        & set "EXTRA_030_URL=https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth"
+set "EXTRA_031_FLAG=SD15"   & set "EXTRA_031_PATH=vae_approx"       & set "EXTRA_031_FILE=taesd_encoder.pth"                        & set "EXTRA_031_URL=https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth"
+:: --- SD3 Extras (8) ---
+set "EXTRA_032_FLAG=SD3"    & set "EXTRA_032_PATH=text_encoders"    & set "EXTRA_032_FILE=clip_g.safetensors"                       & set "EXTRA_032_URL=https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_g.safetensors?download=true"
+set "EXTRA_033_FLAG=SD3"    & set "EXTRA_033_PATH=text_encoders"    & set "EXTRA_033_FILE=clip_l.safetensors"                       & set "EXTRA_033_URL=https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_l.safetensors?download=true"
+set "EXTRA_034_FLAG=SD3"    & set "EXTRA_034_PATH=vae"              & set "EXTRA_034_FILE=sd35_vae.safetensors"                     & set "EXTRA_034_URL=https://civitai.com/api/download/models/985137?type=Model^&format=SafeTensor"
+set "EXTRA_035_FLAG=SD3"    & set "EXTRA_035_PATH=vae_approx"       & set "EXTRA_035_FILE=taesd3_decoder.pth"                       & set "EXTRA_035_URL=https://github.com/madebyollin/taesd/raw/main/taesd3_decoder.pth"
+set "EXTRA_036_FLAG=SD3"    & set "EXTRA_036_PATH=vae_approx"       & set "EXTRA_036_FILE=taesd3_encoder.pth"                       & set "EXTRA_036_URL=https://github.com/madebyollin/taesd/raw/main/taesd3_encoder.pth"
+set "EXTRA_037_FLAG=SD3"    & set "EXTRA_037_PATH=controlnet"       & set "EXTRA_037_FILE=sd3.5_large_controlnet_depth.safetensors" & set "EXTRA_037_URL=https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_depth.safetensors?download=true"
+set "EXTRA_038_FLAG=SD3"    & set "EXTRA_038_PATH=controlnet"       & set "EXTRA_038_FILE=sd3.5_large_controlnet_canny.safetensors" & set "EXTRA_038_URL=https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_canny.safetensors?download=true"
+set "EXTRA_039_FLAG=SD3"    & set "EXTRA_039_PATH=controlnet"       & set "EXTRA_039_FILE=sd3.5_large_controlnet_blur.safetensors"  & set "EXTRA_039_URL=https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_blur.safetensors?download=true"
+:: --- SDXL Extras (8) ---
+set "EXTRA_040_FLAG=SDXL"   & set "EXTRA_040_PATH=vae"              & set "EXTRA_040_FILE=sdxl_vae.safetensors"                     & set "EXTRA_040_URL=https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors?download=true"
+set "EXTRA_041_FLAG=SDXL"   & set "EXTRA_041_PATH=checkpoints"      & set "EXTRA_041_FILE=sd_xl_refiner_1.0_0.9vae.safetensors"     & set "EXTRA_041_URL=https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0_0.9vae.safetensors?download=true"
+set "EXTRA_042_FLAG=SDXL"   & set "EXTRA_042_PATH=controlnet"       & set "EXTRA_042_FILE=controlnet-union-sdxl-1.0.safetensors"    & set "EXTRA_042_URL=https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors?download=true"
+set "EXTRA_043_FLAG=SDXL"   & set "EXTRA_043_PATH=controlnet"       & set "EXTRA_043_FILE=diffusers_xl_canny_full.safetensors"      & set "EXTRA_043_URL=https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors?download=true"
+set "EXTRA_044_FLAG=SDXL"   & set "EXTRA_044_PATH=controlnet"       & set "EXTRA_044_FILE=diffusers_xl_depth_full.safetensors"      & set "EXTRA_044_URL=https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_full.safetensors?download=true"
+set "EXTRA_045_FLAG=SDXL"   & set "EXTRA_045_PATH=controlnet"       & set "EXTRA_045_FILE=thibaud_xl_openpose.safetensors"          & set "EXTRA_045_URL=https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/thibaud_xl_openpose.safetensors?download=true"
+set "EXTRA_046_FLAG=SDXL"   & set "EXTRA_046_PATH=vae_approx"       & set "EXTRA_046_FILE=taesdxl_decoder.pth"                      & set "EXTRA_046_URL=https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth"
+set "EXTRA_047_FLAG=SDXL"   & set "EXTRA_047_PATH=vae_approx"       & set "EXTRA_047_FILE=taesdxl_encoder.pth"                      & set "EXTRA_047_URL=https://github.com/madebyollin/taesd/raw/main/taesdxl_encoder.pth"
+:: --- WAN2.1 Extras (5) ---
+set "EXTRA_048_FLAG=WAN21"  & set "EXTRA_048_PATH=vae"              & set "EXTRA_048_FILE=wan_2.1_vae.safetensors"                  & set "EXTRA_048_URL=%HF_FLX_URL%/wan_2.1_vae.safetensors?download=true"
+set "EXTRA_049_FLAG=WAN21"  & set "EXTRA_049_PATH=loras"            & set "EXTRA_049_FILE=Wan2.1_T2V_14B_FusionX_LoRA.safetensors"  & set "EXTRA_049_URL=%HF_FLX_URL%/Wan2.1_T2V_14B_FusionX_LoRA.safetensors?download=true"
+set "EXTRA_050_FLAG=WAN21"  & set "EXTRA_050_PATH=loras"            & set "EXTRA_050_FILE=Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors" & set "EXTRA_050_URL=%HF_FLX_URL%/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors?download=true"
+set "EXTRA_051_FLAG=WAN21"  & set "EXTRA_051_PATH=vae"              & set "EXTRA_051_FILE=ae.safetensors"                           & set "EXTRA_051_URL=%HF_FLX_URL%/ae.safetensors?download=true"
+set "EXTRA_052_FLAG=WAN21"  & set "EXTRA_052_PATH=clip_vision"      & set "EXTRA_052_FILE=clip_vision_h.safetensors"                & set "EXTRA_052_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors?download=true"
+:: --- WAN2.2 Extras (10) ---
+set "EXTRA_053_FLAG=WAN22"  & set "EXTRA_053_PATH=vae"              & set "EXTRA_053_FILE=wan_2.2_vae.safetensors"                  & set "EXTRA_053_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan2.2_vae.safetensors?download=true"
+set "EXTRA_054_FLAG=WAN22"  & set "EXTRA_054_PATH=loras"            & set "EXTRA_054_FILE=Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors"  & set "EXTRA_054_URL=%HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors?download=true"
+set "EXTRA_055_FLAG=WAN22"  & set "EXTRA_055_PATH=loras"            & set "EXTRA_055_FILE=Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors" & set "EXTRA_055_URL=%HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors?download=true"
+set "EXTRA_056_FLAG=WAN22"  & set "EXTRA_056_PATH=loras"            & set "EXTRA_056_FILE=wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors"      & set "EXTRA_056_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors?download=true"
+set "EXTRA_057_FLAG=WAN22"  & set "EXTRA_057_PATH=loras"            & set "EXTRA_057_FILE=wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors"       & set "EXTRA_057_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors?download=true"
+set "EXTRA_058_FLAG=WAN22"  & set "EXTRA_058_PATH=loras"            & set "EXTRA_058_FILE=Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors"   & set "EXTRA_058_URL=%HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors?download=true"
+set "EXTRA_059_FLAG=WAN22"  & set "EXTRA_059_PATH=loras"            & set "EXTRA_059_FILE=Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors"  & set "EXTRA_059_URL=%HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors?download=true"
+set "EXTRA_060_FLAG=WAN22"  & set "EXTRA_060_PATH=loras"            & set "EXTRA_060_FILE=wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors"       & set "EXTRA_060_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors?download=true"
+set "EXTRA_061_FLAG=WAN22"  & set "EXTRA_061_PATH=loras"            & set "EXTRA_061_FILE=wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors"        & set "EXTRA_061_URL=https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors?download=true"
+set "EXTRA_062_FLAG=WAN22"  & set "EXTRA_062_PATH=text_encoders"    & set "EXTRA_062_FILE=umt5_xxl_fp8_e4m3fn_scaled.safetensors"       & set "EXTRA_062_URL=https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors?download=true"
+:: --- ALWAYS Download (19) ---
+set "EXTRA_063_FLAG=ALWAYS" & set "EXTRA_063_PATH=upscale_models"   & set "EXTRA_063_FILE=4x-ClearRealityV1.pth"                      & set "EXTRA_063_URL=%HF_FLX_URL%/4x-ClearRealityV1.pth?download=true"
+set "EXTRA_064_FLAG=ALWAYS" & set "EXTRA_064_PATH=upscale_models"   & set "EXTRA_064_FILE=4x-UltraSharp.pth"                          & set "EXTRA_064_URL=https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-UltraSharp.pth?download=true"
+set "EXTRA_065_FLAG=ALWAYS" & set "EXTRA_065_PATH=upscale_models"   & set "EXTRA_065_FILE=ESRGAN_4x.pth"                              & set "EXTRA_065_URL=https://huggingface.co/Afizi/ESRGAN_4x.pth/resolve/main/ESRGAN_4x.pth?download=true"
+set "EXTRA_066_FLAG=ALWAYS" & set "EXTRA_066_PATH=upscale_models"   & set "EXTRA_066_FILE=RealESRGAN_x2.pth"                          & set "EXTRA_066_URL=https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth?download=true"
+set "EXTRA_067_FLAG=ALWAYS" & set "EXTRA_067_PATH=upscale_models"   & set "EXTRA_067_FILE=RealESRGAN_x4.pth"                          & set "EXTRA_067_URL=https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true"
+set "EXTRA_068_FLAG=ALWAYS" & set "EXTRA_068_PATH=upscale_models"   & set "EXTRA_068_FILE=RealESRGAN_x8.pth"                          & set "EXTRA_068_URL=https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true"
+set "EXTRA_069_FLAG=ALWAYS" & set "EXTRA_069_PATH=upscale_models"   & set "EXTRA_069_FILE=RealESRGAN_x4plus_anime_6B.pth"             & set "EXTRA_069_URL=%HF_FLX_URL%/RealESRGAN_x4plus_anime_6B.pth?download=true"
+set "EXTRA_070_FLAG=ALWAYS" & set "EXTRA_070_PATH=upscale_models"   & set "EXTRA_070_FILE=4x_NMKD-Siax_200k.pth"                       & set "EXTRA_070_URL=https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Siax_200k.pth"
+set "EXTRA_071_FLAG=ALWAYS" & set "EXTRA_071_PATH=upscale_models"   & set "EXTRA_071_FILE=4x_foolhardy_Remacri.pth"                   & set "EXTRA_071_URL=https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_foolhardy_Remacri.pth?download=true"
+set "EXTRA_072_FLAG=ALWAYS" & set "EXTRA_072_PATH=upscale_models"   & set "EXTRA_072_FILE=4x_NMKD-Superscale-SP_178000_G.pth"        & set "EXTRA_072_URL=https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Superscale-SP_178000_G.pth?download=true"
+set "EXTRA_073_FLAG=ALWAYS" & set "EXTRA_073_PATH=upscale_models"   & set "EXTRA_073_FILE=4xNomos8kDAT.pth"                           & set "EXTRA_073_URL=https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4xNomos8kDAT.pth?download=true"
+set "EXTRA_074_FLAG=ALWAYS" & set "EXTRA_074_PATH=sams"             & set "EXTRA_074_FILE=sam_vit_b_01ec64.pth"                       & set "EXTRA_074_URL=%HF_FLX_URL%/sam_vit_b_01ec64.pth?download=true"
+set "EXTRA_075_FLAG=ALWAYS" & set "EXTRA_075_PATH=ultralytics\bbox" & set "EXTRA_075_FILE=hand_yolov8s.pt"                          & set "EXTRA_075_URL=https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/hand_yolov8s.pt?download=true"
+set "EXTRA_076_FLAG=ALWAYS" & set "EXTRA_076_PATH=ultralytics\bbox" & set "EXTRA_076_FILE=face_yolov8m.pt"                          & set "EXTRA_076_URL=https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/face_yolov8m.pt?download=true"
+set "EXTRA_077_FLAG=ALWAYS" & set "EXTRA_077_PATH=ultralytics\segm" & set "EXTRA_077_FILE=person_yolov8m-seg.pt"                    & set "EXTRA_077_URL=https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/segm/person_yolov8m-seg.pt?download=true"
+set "EXTRA_078_FLAG=ALWAYS" & set "EXTRA_078_PATH=text_encoders"    & set "EXTRA_078_FILE=llama_3.1_8b_instruct_fp8_scaled.safetensors" & set "EXTRA_078_URL=%HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true"
+set "EXTRA_079_FLAG=ALWAYS" & set "EXTRA_079_PATH=clip_vision"      & set "EXTRA_079_FILE=sigclip_vision_patch14_384.safetensors"     & set "EXTRA_079_URL=%HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true"
+set "EXTRA_080_FLAG=ALWAYS" & set "EXTRA_080_PATH=clip"             & set "EXTRA_080_FILE=ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" & set "EXTRA_080_URL=%HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true"
+set "EXTRA_081_FLAG=ALWAYS" & set "EXTRA_081_PATH=llm_gguf"         & set "EXTRA_081_FILE=Hermes-3-Llama-3.1-8B.Q8_0.gguf"            & set "EXTRA_081_URL=https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true"
+
 :: --- Custom Node Repositories (Robust Method) ---
 set "NODE_URL_01=https://github.com/ltdrdata/ComfyUI-Manager.git"
 set "NODE_URL_02=https://codeberg.org/Gourieff/comfyui-reactor-node.git"
@@ -275,13 +373,34 @@ set "NODE_URL_46=https://github.com/fairy-root/Flux-Prompt-Generator"
 set "NODE_URL_47=https://github.com/marduk191/ComfyUI-Fluxpromptenhancer"
 set "NODE_URL_48=https://github.com/lquesada/ComfyUI-Inpaint-CropAndStitch"
 
-:: Run initial verification silently to check for existing components
+:: Run initial verification silently to check for existing components and calculate initial size
 call :silent_verify_all
+call :calculate_total_size
 
 :: -----------------------------------------------------------------------------
 :: Section 2: Main Menu
 :: -----------------------------------------------------------------------------
 :main_menu
+:: --- Check available disk space (robust PowerShell method) ---
+set "FREE_SPACE_GB=?"
+set "DISK_SPACE_DISPLAY="
+
+:: Get free space and convert to GB in a single command, rounding to 1 decimal place
+for /f "delims=" %%s in ('powershell -NoProfile -Command "$drive = '%~d0'; $freeBytes = (Get-Volume -DriveLetter $drive[0]).SizeRemaining; $gb = [Math]::Round($freeBytes / 1GB, 1); $gb.ToString([System.Globalization.CultureInfo]::InvariantCulture)"') do set "FREE_SPACE_GB=%%s"
+:: This part of your code below remains the same
+if defined FREE_SPACE_GB (
+    :: Compare with required size (integer part only for simplicity)
+    set "SIZE_TOTAL_INT=0" & for /f "delims=." %%i in ("!SIZE_TOTAL_GB!") do set "SIZE_TOTAL_INT=%%i"
+
+    if !FREE_SPACE_GB! GTR !SIZE_TOTAL_INT! (
+        set "DISK_SPACE_DISPLAY=%GREEN% / !FREE_SPACE_GB! GB available%RESET%"
+    ) else (
+        set "DISK_SPACE_DISPLAY=%RED% / !FREE_SPACE_GB! GB available%RESET%"
+    )
+) else (
+     set "DISK_SPACE_DISPLAY=%RED% / Space Check Failed%RESET%"
+)
+
 cls
 
 :: --- Set Status Checkmarks ---
@@ -325,12 +444,12 @@ echo %BLUE%=====================================================================
 echo.
 echo %YELLOW%[ Main Actions ]%RESET%
 echo %WHITE%  S^) Select Models ^& Quality %PURPLE%!MODEL_SELECTION_STATUS!%RESET%
-echo %WHITE%  I^) Install Everything ^(Approx. %PURPLE%!SIZE_TOTAL_GB! GB%RESET%^)%RESET%
+echo %WHITE%  I^) Install Everything ^(Approx. %PURPLE%!SIZE_TOTAL_GB! GB needed!DISK_SPACE_DISPLAY!^)%RESET%
 echo %WHITE%  V^) Verify Installation ^(updates status checks below^)%RESET%
 echo.
 echo %YELLOW%[ Installation Status ^& Manual Steps ]%RESET%
-echo %WHITE%  1^) !CHECK_COMFYUI! Install ComfyUI ^(Approx. %PURPLE%!SIZE_COMFYUI_GB! GB%RESET%^)%RESET%
-echo %WHITE%  2^) !CHECK_MODELS! Install Selected Models ^(Approx. %PURPLE%!SIZE_MODELS_GB! GB%RESET%^)%RESET%
+echo %WHITE%  1^) !CHECK_COMFYUI! Install ComfyUI ^(Approx. %PURPLE%6.5 GB%RESET%^)%RESET%
+echo %WHITE%  2^) !CHECK_MODELS! Install Selected Models ^(Approx. %PURPLE%!SIZE_MODELS_GB! GB needed%RESET%^)%RESET%
 echo %WHITE%  3^) !CHECK_NODES! Install Custom Nodes%RESET%
 echo %WHITE%  4^) !CHECK_TRITON! Install Triton ^& Sage Attention%RESET%
 echo %WHITE%  5^) !CHECK_LIBS! Install Python Include Libs%RESET%
@@ -380,22 +499,27 @@ goto :main_menu
 :: --- Standalone wrappers for menu options ---
 :install_comfyui_standalone
 call :install_comfyui
+call :calculate_total_size
 goto :main_menu
 
 :install_models_standalone
 call :install_models
+call :calculate_total_size
 goto :main_menu
 
 :install_nodes_standalone
 call :install_nodes
+call :calculate_total_size
 goto :main_menu
 
 :install_triton_sage_standalone
 call :install_triton_sage
+call :calculate_total_size
 goto :main_menu
 
 :setup_python_libs_standalone
 call :setup_python_libs
+call :calculate_total_size
 goto :main_menu
 
 :: --- Toggle Server Manager ---
@@ -451,6 +575,7 @@ echo %GREEN%           [X] Full Installation Complete!                          
 echo %GREEN%======================================================================%RESET%
 echo.
 set "LAST_ACTION_MSG=%GREEN%Full Installation completed successfully!%RESET%"
+call :calculate_total_size
 pause
 goto :main_menu
 
@@ -1059,129 +1184,35 @@ echo %BLUE%        Downloading Supporting Models (VAEs, Upscalers, etc.)        
 echo %BLUE%======================================================================%RESET%
 echo.
 
-:: --- FLUX Models ---
-if defined FLAG_FLUX_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for FLUX...%RESET%
-    call :grab "diffusion_models\svdq-fp4_r32-flux.1-kontext-dev.safetensors" "%HF_FLX_URL%/svdq-fp4_r32-flux.1-kontext-dev.safetensors?download=true"
-    call :grab "diffusion_models\svdq-int4_r32-flux.1-kontext-dev.safetensors" "%HF_FLX_URL%/svdq-int4_r32-flux.1-kontext-dev.safetensors?download=true"
-    call :grab "text_encoders\umt5-xxl-encoder-Q5_K_S.gguf" "%HF_FLX_URL%/umt5-xxl-encoder-Q5_K_S.gguf?download=true"
-    call :grab "text_encoders\t5xxl_fp16.safetensors" "%HF_FLX_URL%/t5xxl_fp16.safetensors?download=true"
-    call :grab "text_encoders\t5xxl_fp8_e4m3fn.safetensors" "%HF_FLX_URL%/t5xxl_fp8_e4m3fn.safetensors?download=true"
-    call :grab "text_encoders\t5xxl_fp8_e4m3fn_scaled.safetensors" "%HF_FLX_URL%/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true"
-    call :grab "pulid\pulid_flux_v0.9.1.safetensors" "https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors?download=true"
-    call :grab "controlnet\FLUX1-dev-ControlNet-Union-Pro.safetensors" "%HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true"
-    call :grab "controlnet\FLUX1-dev-ControlNet-Depth.safetensors" "https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Depth/resolve/main/diffusion_pytorch_model.safetensors?download=true"
-    call :grab "xlabs\ipadapters\ip_adapter.safetensors" "https://huggingface.co/XLabs-AI/flux-ip-adapter-v2/resolve/main/ip_adapter.safetensors?download=true"
-    call :grab "xlabs\controlnets\flux-canny-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-canny-v3/resolve/main/flux-canny-controlnet-v3.safetensors?download=true"
-    call :grab "xlabs\controlnets\flux-depth-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-depth-v3/resolve/main/flux-depth-controlnet-v3.safetensors?download=true"
-    call :grab "xlabs\controlnets\flux-hed-controlnet-v3.safetensors" "https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true"
-    call :grab "clip_vision\model.safetensors" "https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true"
-    call :grab "style_models\flux1-redux-dev.safetensors" "https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true"
-    call :grab "vae_approx\taef1_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taef1_decoder.pth"
-    call :grab "vae_approx\taef1_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taef1_encoder.pth"
-)
+:: --- Loop through the shared/extra models configuration ---
+for /l %%E in (1,1,999) do (
+    set "num=00%%E" & set "num=!num:~-3!"
+    if defined EXTRA_!num!_FLAG (
+        call set "MODEL_FLAG=%%EXTRA_!num!_FLAG%%"
+        set "is_needed=false"
 
-:: --- Qwen Models ---
-if defined FLAG_QWEN_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for Qwen...%RESET%
-    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf?download=true"
-    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true"
-    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf?download=true"
-    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf?download=true"
-    call :grab "text_encoders\Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf" "%HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf?download=true"
-    call :grab "text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors" "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true"
-    call :grab "vae\qwen_image_vae.safetensors" "%HF_FLX_URL%/qwen_image_vae.safetensors?download=true"
-    call :grab "loras\Qwen-Image-Lightning-8steps-V1.0.safetensors" "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.0.safetensors?download=true"
-    call :grab "loras\Qwen-Image-Lightning-4steps-V1.0.safetensors" "https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-4steps-V1.0.safetensors?download=true"
-    call :grab "loras/qwen_image_union_diffsynth_lora.safetensors" "https://huggingface.co/Comfy-Org/Qwen-Image-DiffSynth-ControlNets/resolve/main/split_files/loras/qwen_image_union_diffsynth_lora.safetensors?download=true"
-)
+        :: Check if the model should always be downloaded
+        if "!MODEL_FLAG!"=="ALWAYS" (
+            set "is_needed=true"
+        ) else (
+            :: Check if the flag for the corresponding model family is set
+            set "FAMILY_FLAG_VAR=FLAG_!MODEL_FLAG!_SELECTED"
+            if defined !FAMILY_FLAG_VAR! (
+                set "is_needed=true"
+            )
+        )
 
-:: --- HiDream Models ---
-if defined FLAG_HIDREAM_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for HiDream...%RESET%
-    call :grab "text_encoders\clip_g_hidream.safetensors" "%HF_FLX_URL%/clip_g_hidream.safetensors?download=true"
-    call :grab "text_encoders\clip_l_hidream.safetensors" "%HF_FLX_URL%/clip_l_hidream.safetensors?download=true"
-)
+        :: If the model is needed, download it
+        if "!is_needed!"=="true" (
+            call set "DEST_SUBDIR=%%EXTRA_!num!_PATH%%"
+            call set "FILENAME=%%EXTRA_!num!_FILE%%"
+            call set "DOWNLOAD_URL=%%EXTRA_!num!_URL%%"
 
-:: --- SD Models ---
-if defined FLAG_SD15_SELECTED (
-echo %YELLOW%--- Downloading supporting files for SD1.5...%RESET%
-    call :grab "vae_approx\taesd_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth"
-    call :grab "vae_approx\taesd_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth"
+            echo %YELLOW%--- Downloading support file for !MODEL_FLAG!: !FILENAME!%RESET%
+            call :grab "!DEST_SUBDIR!\!FILENAME!" "!DOWNLOAD_URL!"
+        )
+    )
 )
-
-:: --- SD3 Models ---
-if defined FLAG_SD3_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for SD3...%RESET%
-    call :grab "text_encoders\clip_g.safetensors" "https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_g.safetensors?download=true"
-    call :grab "text_encoders\clip_l.safetensors" "https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_l.safetensors?download=true"
-    call :grab "vae\sd35_vae.safetensors" "https://civitai.com/api/download/models/985137?type=Model&format=SafeTensor"
-    call :grab "vae_approx\taesd3_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd3_decoder.pth"
-    call :grab "vae_approx\taesd3_encoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesd3_encoder.pth"
-    call :grab "controlnet\sd3.5_large_controlnet_depth.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_depth.safetensors?download=true"
-    call :grab "controlnet\sd3.5_large_controlnet_canny.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_canny.safetensors?download=true"
-    call :grab "controlnet\sd3.5_large_controlnet_blur.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_blur.safetensors?download=true"
-)
-
-:: --- SDXL Models ---
-if defined FLAG_SDXL_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for SDXL...%RESET%
-    call :grab "vae\sdxl_vae.safetensors" "https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors?download=true"
-    call :grab "checkpoints\sd_xl_refiner_1.0_0.9vae.safetensors" "https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0_0.9vae.safetensors?download=true"
-    call :grab "controlnet\controlnet-union-sdxl-1.0.safetensors" "https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors?download=true"
-    call :grab "controlnet\diffusers_xl_canny_full.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors?download=true"
-    call :grab "controlnet\diffusers_xl_depth_full.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_full.safetensors?download=true"
-    call :grab "controlnet\thibaud_xl_openpose.safetensors" "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/thibaud_xl_openpose.safetensors?download=true"
-    call :grab "vae_approx\taesdxl_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth"
-    call :grab "vae_approx\taesdxl_decoder.pth" "https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth"
-)
-
-:: --- WAN 2.1 Models ---
-if defined FLAG_WAN21_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for WAN2.1...%RESET%
-    call :grab "vae\wan_2.1_vae.safetensors" "%HF_FLX_URL%/wan_2.1_vae.safetensors?download=true"
-    call :grab "loras\Wan2.1_T2V_14B_FusionX_LoRA.safetensors" "%HF_FLX_URL%/Wan2.1_T2V_14B_FusionX_LoRA.safetensors?download=true"
-    call :grab "loras\Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors" "%HF_FLX_URL%/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors?download=true"
-    call :grab "vae\ae.safetensors" "%HF_FLX_URL%/ae.safetensors?download=true"
-    call :grab "clip_vision\clip_vision_h.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors?download=true"
-)
-
-:: --- WAN 2.2 Models ---
-if defined FLAG_WAN22_SELECTED (
-    echo %YELLOW%--- Downloading supporting files for WAN2.2...%RESET%
-    call :grab "vae\wan_2.2_vae.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan2.2_vae.safetensors?download=true"
-    call :grab "loras\Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors?download=true"
-    call :grab "loras\Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors?download=true"
-    call :grab "loras\wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors?download=true"
-    call :grab "loras\wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors?download=true"
-    call :grab "loras\Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors?download=true"
-    call :grab "loras\Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors" "%HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors?download=true"
-    call :grab "loras\wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors?download=true"
-    call :grab "loras\wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors?download=true"
-    call :grab "text_encoders\umt5_xxl_fp8_e4m3fn_scaled.safetensors" "https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors?download=true"
-)
-
-echo.
-echo %YELLOW%--- Downloading general purpose models ^& tools (Upscalers, etc.)...%RESET%
-call :grab "upscale_models\4x-ClearRealityV1.pth" "%HF_FLX_URL%/4x-ClearRealityV1.pth?download=true"
-call :grab "upscale_models\4x-UltraSharp.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-UltraSharp.pth?download=true"
-call :grab "upscale_models\ESRGAN_4x.pth" "https://huggingface.co/Afizi/ESRGAN_4x.pth/resolve/main/ESRGAN_4x.pth?download=true"
-call :grab "upscale_models\RealESRGAN_x2.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth?download=true"
-call :grab "upscale_models\RealESRGAN_x4.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true"
-call :grab "upscale_models\RealESRGAN_x8.pth" "https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true"
-call :grab "upscale_models\RealESRGAN_x4plus_anime_6B.pth" "%HF_FLX_URL%/RealESRGAN_x4plus_anime_6B.pth?download=true"
-call :grab "upscale_models\4x_NMKD-Siax_200k.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Siax_200k.pth"
-call :grab "upscale_models\4x_foolhardy_Remacri.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_foolhardy_Remacri.pth?download=true"
-call :grab "upscale_models\4x_NMKD-Superscale-SP_178000_G.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Superscale-SP_178000_G.pth?download=true"
-call :grab "upscale_models\4xNomos8kDAT.pth" "https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4xNomos8kDAT.pth?download=true"
-call :grab "sams\sam_vit_b_01ec64.pth" "%HF_FLX_URL%/sam_vit_b_01ec64.pth?download=true"
-call :grab "ultralytics\bbox\hand_yolov8s.pt" "https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/hand_yolov8s.pt?download=true"
-call :grab "ultralytics\bbox\face_yolov8m.pt" "https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/face_yolov8m.pt?download=true"
-call :grab "ultralytics\segm\person_yolov8m-seg.pt" "https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/segm/person_yolov8m-seg.pt?download=true"
-call :grab "text_encoders\llama_3.1_8b_instruct_fp8_scaled.safetensors" "%HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true"
-call :grab "clip_vision\sigclip_vision_patch14_384.safetensors" "%HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true"
-call :grab "clip\ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors" "%HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true"
-call :grab "llm_gguf\Hermes-3-Llama-3.1-8B.Q8_0.gguf" "https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true"
 
 echo.
 echo %YELLOW%--- Cloning Repo-based Models (InsightFace, Florence, etc.)...%RESET%
@@ -1627,7 +1658,7 @@ exit /b 1
 cls
 echo.
 echo %BLUE%======================================================================%RESET%
-echo %BLUE%             Calculating Approximate Total Download Size              %RESET%
+echo %BLUE%       Calculating Required Download Size (excluding existing files)    %RESET%
 echo %BLUE%======================================================================%RESET%
 echo.
 echo %YELLOW%This may take a moment. Fetching file sizes from the web...%RESET%
@@ -1635,61 +1666,84 @@ echo %YELLOW%This may take a moment. Fetching file sizes from the web...%RESET%
 set "URL_LIST_FILE=%TEMP%\comfy_url_list.txt"
 if exist "%URL_LIST_FILE%" del "%URL_LIST_FILE%" >nul 2>&1
 
-:: --- Add Selected Models to URL list ---
+:: --- Determine download size for ComfyUI download + extract size ---
+set "SIZE_COMFYUI_DOWNLOAD_GB=0.0"
+if "!STATUS_COMFYUI!"=="0" (
+    set "SIZE_COMFYUI_DOWNLOAD_GB=8.5"
+)
+
+:: --- Add URLs of MISSING selected models to list ---
 for /l %%G in (1,1,99) do (
     set "num=0%%G" & set "num=!num:~-2!"
     if defined MODEL_!num!_NAME (
         for /l %%I in (1,1,9) do (
             if defined MODEL_!num!_OPT_%%I_INSTALL (
+                call set "FILENAME=%%MODEL_!num!_OPT_%%I_FILE%%"
+                call set "FILETYPE=%%MODEL_!num!_OPT_%%I_TYPE%%"
                 call set "URL=%%MODEL_!num!_OPT_%%I_URL%%"
-                echo !URL!>>"%URL_LIST_FILE%"
+
+                set "TARGET_DIR="
+                if /i "!FILETYPE!"=="gguf" set "TARGET_DIR=unet"
+                if /i "!FILETYPE!"=="gguf_flux" set "TARGET_DIR=unet"
+                if /i "!FILETYPE!"=="checkpoint" set "TARGET_DIR=checkpoints"
+                if /i "!FILETYPE!"=="checkpoints" set "TARGET_DIR=checkpoints"
+                if /i "!FILETYPE!"=="diffusion_model" set "TARGET_DIR=diffusion_models"
+                if /i "!FILETYPE!"=="lora" set "TARGET_DIR=loras"
+
+                if defined TARGET_DIR (
+                    set "FILE_PATH=!MODELS_DIR!\!TARGET_DIR!\!FILENAME!"
+                    if not exist "!FILE_PATH!" (
+                        echo !URL!>>"%URL_LIST_FILE%"
+                    )
+                )
             )
         )
     )
 )
 
-:: --- Add Shared Models to URL list ---
+:: --- Add URLs of MISSING shared models to list ---
 call :add_shared_urls_to_list
 
-:: --- Calculate model size using a temporary PowerShell script for robustness ---
+:: --- Calculate model size from URL list ---
 set "SIZE_MODELS_GB=0.0"
 set "PS_SCRIPT_MODELS=%TEMP%\get_model_size.ps1"
 
-:: Write the PowerShell script line-by-line to avoid batch parser issues
-echo try { > "!PS_SCRIPT_MODELS!"
-echo     $totalBytes = 0; >> "!PS_SCRIPT_MODELS!"
-echo     $urlFile = '!URL_LIST_FILE!'; >> "!PS_SCRIPT_MODELS!"
-echo     if (Test-Path -LiteralPath $urlFile) { >> "!PS_SCRIPT_MODELS!"
-echo         Get-Content -LiteralPath $urlFile ^| ForEach-Object { >> "!PS_SCRIPT_MODELS!"
-echo             try { >> "!PS_SCRIPT_MODELS!"
-echo                 $response = Invoke-WebRequest -Uri $_ -Method Head -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop; >> "!PS_SCRIPT_MODELS!"
-echo                 if ($response.Headers.ContainsKey('Content-Length') -and $response.Headers['Content-Length']) { >> "!PS_SCRIPT_MODELS!"
-echo                     $totalBytes += [long]$response.Headers['Content-Length']; >> "!PS_SCRIPT_MODELS!"
-echo                 } >> "!PS_SCRIPT_MODELS!"
-echo             } catch {} >> "!PS_SCRIPT_MODELS!"
-echo         } >> "!PS_SCRIPT_MODELS!"
-echo     } >> "!PS_SCRIPT_MODELS!"
-echo     $result = [Math]::Round($totalBytes / 1GB, 1); >> "!PS_SCRIPT_MODELS!"
-echo     Write-Output $result.ToString([System.Globalization.CultureInfo]::InvariantCulture); >> "!PS_SCRIPT_MODELS!"
-echo } catch { >> "!PS_SCRIPT_MODELS!"
-echo     Write-Output '0.0'; >> "!PS_SCRIPT_MODELS!"
-echo } >> "!PS_SCRIPT_MODELS!"
+(
+echo try {
+echo     $totalBytes = 0;
+echo     $urlFile = '!URL_LIST_FILE!';
+echo     if (Test-Path -LiteralPath $urlFile^) {
+echo         Get-Content -LiteralPath $urlFile ^| ForEach-Object {
+echo             try {
+echo                 $response = Invoke-WebRequest -Uri $_ -Method Head -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop;
+echo                 if ($response.Headers.ContainsKey^('Content-Length'^) -and $response.Headers['Content-Length']^) {
+echo                     $totalBytes += [long]$response.Headers['Content-Length'];
+echo                 }
+echo             } catch {}
+echo         }
+echo     }
+echo     $result = [Math]::Round^($totalBytes / 1GB, 1^);
+echo     Write-Output $result.ToString^([System.Globalization.CultureInfo]::InvariantCulture^);
+echo } catch {
+echo     Write-Output '0.0';
+echo }
+) > "!PS_SCRIPT_MODELS!"
 
 for /f "delims=" %%s in ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "!PS_SCRIPT_MODELS!"') do set "SIZE_MODELS_GB=%%s"
 if exist "!PS_SCRIPT_MODELS!" del "!PS_SCRIPT_MODELS!" >nul 2>&1
 
-:: --- Calculate total size using the same robust method ---
-set "SIZE_TOTAL_GB=%SIZE_COMFYUI_GB%"
+:: --- Calculate total size using a robust PowerShell method ---
 set "PS_SCRIPT_TOTAL=%TEMP%\get_total_size.ps1"
-
-echo try { > "!PS_SCRIPT_TOTAL!"
-echo     $sizeModels = [double]::Parse('!SIZE_MODELS_GB!', [System.Globalization.CultureInfo]::InvariantCulture); >> "!PS_SCRIPT_TOTAL!"
-echo     $sizeComfy = [double]::Parse('%SIZE_COMFYUI_GB%', [System.Globalization.CultureInfo]::InvariantCulture); >> "!PS_SCRIPT_TOTAL!"
-echo     $total = $sizeComfy + $sizeModels; >> "!PS_SCRIPT_TOTAL!"
-echo     Write-Output ([Math]::Round($total, 1).ToString([System.Globalization.CultureInfo]::InvariantCulture)); >> "!PS_SCRIPT_TOTAL!"
-echo } catch { >> "!PS_SCRIPT_TOTAL!"
-echo     Write-Output '!SIZE_COMFYUI_GB!'; >> "!PS_SCRIPT_TOTAL!"
-echo } >> "!PS_SCRIPT_TOTAL!"
+(
+echo try {
+echo     $sizeModels = [double]::Parse^('!SIZE_MODELS_GB!', [System.Globalization.CultureInfo]::InvariantCulture^);
+echo     $sizeComfy = [double]::Parse^('!SIZE_COMFYUI_DOWNLOAD_GB!', [System.Globalization.CultureInfo]::InvariantCulture^);
+echo     $total = $sizeComfy + $sizeModels;
+echo     Write-Output ^([Math]::Round^($total, 1^).ToString^([System.Globalization.CultureInfo]::InvariantCulture^)^);
+echo } catch {
+echo     Write-Output '!SIZE_COMFYUI_DOWNLOAD_GB!';
+echo }
+) > "!PS_SCRIPT_TOTAL!"
 
 for /f "delims=" %%t in ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "!PS_SCRIPT_TOTAL!"') do set "SIZE_TOTAL_GB=%%t"
 if exist "!PS_SCRIPT_TOTAL!" del "!PS_SCRIPT_TOTAL!" >nul 2>&1
@@ -1700,105 +1754,35 @@ timeout /t 1 >nul
 goto :eof
 
 :add_shared_urls_to_list
-:: This subroutine adds all conditionally downloaded shared model URLs to the list for size calculation.
-if defined FLAG_FLUX_SELECTED (
-    echo %HF_FLX_URL%/svdq-fp4_r32-flux.1-kontext-dev.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/svdq-int4_r32-flux.1-kontext-dev.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/umt5-xxl-encoder-Q5_K_S.gguf?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/t5xxl_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/t5xxl_fp8_e4m3fn.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Depth/resolve/main/diffusion_pytorch_model.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/XLabs-AI/flux-ip-adapter-v2/resolve/main/ip_adapter.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/XLabs-AI/flux-controlnet-canny-v3/resolve/main/flux-canny-controlnet-v3.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/XLabs-AI/flux-controlnet-depth-v3/resolve/main/flux-depth-controlnet-v3.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taef1_decoder.pth>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taef1_encoder.pth>>"%URL_LIST_FILE%"
+:: This subroutine adds all conditionally downloaded shared model URLs to the list for size calculation,
+:: but only if the target file does not already exist.
+for /l %%E in (1,1,999) do (
+    set "num=00%%E" & set "num=!num:~-3!"
+    if defined EXTRA_!num!_FLAG (
+        call set "MODEL_FLAG=%%EXTRA_!num!_FLAG%%"
+        set "is_needed=false"
+
+        if "!MODEL_FLAG!"=="ALWAYS" (
+            set "is_needed=true"
+        ) else (
+            set "FAMILY_FLAG_VAR=FLAG_!MODEL_FLAG!_SELECTED"
+            if defined !FAMILY_FLAG_VAR! (
+                set "is_needed=true"
+            )
+        )
+
+        if "!is_needed!"=="true" (
+            call set "DEST_SUBDIR=%%EXTRA_!num!_PATH%%"
+            call set "FILENAME=%%EXTRA_!num!_FILE%%"
+            call set "DOWNLOAD_URL=%%EXTRA_!num!_URL%%"
+
+            set "FILE_PATH=!MODELS_DIR!\!DEST_SUBDIR!\!FILENAME!"
+            if not exist "!FILE_PATH!" (
+                echo !DOWNLOAD_URL!>>"%URL_LIST_FILE%"
+            )
+        )
+    )
 )
-if defined FLAG_QWEN_SELECTED (
-    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/qwen_image_vae.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.0.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-4steps-V1.0.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Qwen-Image-DiffSynth-ControlNets/resolve/main/split_files/loras/qwen_image_union_diffsynth_lora.safetensors?download=true>>"%URL_LIST_FILE%"
-)
-if defined FLAG_HIDREAM_SELECTED (
-    echo %HF_FLX_URL%/clip_g_hidream.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/clip_l_hidream.safetensors?download=true>>"%URL_LIST_FILE%"
-)
-if defined FLAG_SD15_SELECTED (
-    echo https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth>>"%URL_LIST_FILE%"
-)
-if defined FLAG_SD3_SELECTED (
-    echo https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_g.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_l.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://civitai.com/api/download/models/985137?type=Model^&format=SafeTensor>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taesd3_decoder.pth>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taesd3_encoder.pth>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_depth.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_canny.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_blur.safetensors?download=true>>"%URL_LIST_FILE%"
-)
-if defined FLAG_SDXL_SELECTED (
-    echo https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0_0.9vae.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_full.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/thibaud_xl_openpose.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth>>"%URL_LIST_FILE%"
-    echo https://github.com/madebyollin/taesd/raw/main/taesdxl_encoder.pth>>"%URL_LIST_FILE%"
-)
-if defined FLAG_WAN21_SELECTED (
-    echo %HF_FLX_URL%/wan_2.1_vae.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Wan2.1_T2V_14B_FusionX_LoRA.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/ae.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors?download=true>>"%URL_LIST_FILE%"
-)
-if defined FLAG_WAN22_SELECTED (
-    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan2.2_vae.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo %HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors?download=true>>"%URL_LIST_FILE%"
-    echo https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
-)
-:: Always-downloaded models
-echo %HF_FLX_URL%/4x-ClearRealityV1.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-UltraSharp.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/Afizi/ESRGAN_4x.pth/resolve/main/ESRGAN_4x.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true>>"%URL_LIST_FILE%"
-echo %HF_FLX_URL%/RealESRGAN_x4plus_anime_6B.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Siax_200k.pth>>"%URL_LIST_FILE%"
-echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_foolhardy_Remacri.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Superscale-SP_178000_G.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4xNomos8kDAT.pth?download=true>>"%URL_LIST_FILE%"
-echo %HF_FLX_URL%/sam_vit_b_01ec64.pth?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/hand_yolov8s.pt?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/face_yolov8m.pt?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/segm/person_yolov8m-seg.pt?download=true>>"%URL_LIST_FILE%"
-echo %HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
-echo %HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true>>"%URL_LIST_FILE%"
-echo %HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true>>"%URL_LIST_FILE%"
-echo https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true>>"%URL_LIST_FILE%"
 goto :eof
 
 :: -----------------------------------------------------------------------------
@@ -1813,40 +1797,3 @@ echo %BLUE%=====================================================================
 echo.
 timeout /t 2 >nul
 exit
-
-:: =============================================================================
-:: Embedded PowerShell Scripts for Size Calculation
-:: Do not execute this section directly. It is read by the :calculate_total_size subroutine.
-:: =============================================================================
-
-::PSM1 - Model Size Script starts here
-::PSM1 try {
-::PSM1     $totalBytes = 0
-::PSM1     $urlFile = '%URL_LIST_FILE%'
-::PSM1     if (Test-Path -LiteralPath $urlFile) {
-::PSM1         Get-Content -LiteralPath $urlFile | ForEach-Object {
-::PSM1             try {
-::PSM1                 $response = Invoke-WebRequest -Uri $_ -Method Head -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
-::PSM1                 if ($response.Headers.ContainsKey('Content-Length') -and $response.Headers['Content-Length']) {
-::PSM1                     $totalBytes += [long]$response.Headers['Content-Length']
-::PSM1                 }
-::PSM1             } catch {}
-::PSM1         }
-::PSM1     }
-::PSM1     $result = [Math]::Round($totalBytes / 1GB, 1)
-::PSM1     Write-Output $result.ToString([System.Globalization.CultureInfo]::InvariantCulture)
-::PSM1 } catch {
-::PSM1     Write-Output '0.0'
-::PSM1 }
-::PSM1 - Model Size Script ends here
-
-::PST1 - Total Size Script starts here
-::PST1 try {
-::PST1     $sizeModels = [double]::Parse('__SIZE_MODELS_GB__', [System.Globalization.CultureInfo]::InvariantCulture)
-::PST1     $sizeComfy = [double]::Parse('__SIZE_COMFYUI_GB__', [System.Globalization.CultureInfo]::InvariantCulture)
-::PST1     $total = $sizeComfy + $sizeModels
-::PST1     Write-Output ([Math]::Round($total, 1).ToString([System.Globalization.CultureInfo]::InvariantCulture))
-::PST1 } catch {
-::PST1     Write-Output '__SIZE_COMFYUI_GB__'
-::PST1 }
-::PST1 - Total Size Script ends here
