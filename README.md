@@ -24,7 +24,7 @@ https://github.com/Draek2077/comfyui-server-manager
 
 https://github.com/Draek2077/comfyui-client-wrapper
 
-Once the base ComfyUI installation is complete, you can re-use the installer to add models easily without having to re-download or re-install parts that were already installed before.
+Once the base ComfyUI installation is complete, you can re-use the installer to add models easily without having to re-download or re-install parts that were already installed before. The system is meant to be idempotent so you can re-run things over and over without destroying anything.
 
 The project was written entirely using Gemini 2.5 Pro.
 
