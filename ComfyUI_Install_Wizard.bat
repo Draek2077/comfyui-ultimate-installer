@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.9.5 (Robust Echo Fix)
+:: Version: 2.9.6 (Model Fallback Fix)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -575,33 +575,39 @@ for /l %%G in (1,1,99) do (
 :: FIX: Use a local variable for quality_choice to allow for correct delayed expansion inside the loops below.
 set "local_quality_choice=%quality_choice%"
 
-if "%local_quality_choice%"=="6" (
-    :: Special case for "Full" quality, find the best available (highest number)
-    for /l %%G in (1,1,99) do (
-        set "num=0%%G" & set "num=!num:~-2!"
-        call set "is_selected=%%SELECT_MODEL_!num!%%"
-        if "!is_selected!"=="1" (
-            set "found_best=false"
-            for /l %%H in (6,-1,1) do (
-                if "!found_best!"=="false" if defined MODEL_!num!_OPT_%%H_NAME (
+:: Loop through all potential models (01-99)
+for /l %%G in (1,1,99) do (
+    :: Format number with leading zero (e.g., 1 -> 01)
+    set "num=0%%G"
+    set "num=!num:~-2!"
+
+    :: Check if the current model was selected by the user
+    call set "is_selected=%%SELECT_MODEL_!num!%%"
+    if "!is_selected!"=="1" (
+
+        :: Flag to ensure we only install one quality level per model
+        set "found_quality_for_model=false"
+
+        :: Loop downwards from the user's quality choice to find the best available option
+        for /l %%H in (!local_quality_choice!,-1,1) do (
+
+            :: If we haven't found a suitable quality level for this model yet...
+            if "!found_quality_for_model!"=="false" (
+
+                :: ...check if the current quality level (%%H) exists for this model (!num!)
+                if defined MODEL_!num!_OPT_%%H_NAME (
+
+                    :: If it exists, flag it for installation
                     set "MODEL_!num!_OPT_%%H_INSTALL=1"
-                    set "found_best=true"
+
+                    :: Set the flag to true to stop searching for lower quality levels
+                    set "found_quality_for_model=true"
                 )
             )
         )
     )
-) else (
-    :: Standard quality selection based on option number
-    for /l %%G in (1,1,99) do (
-        set "num=0%%G" & set "num=!num:~-2!"
-        call set "is_selected=%%SELECT_MODEL_!num!%%"
-        if "!is_selected!"=="1" (
-            if defined MODEL_!num!_OPT_!local_quality_choice!_NAME (
-                set "MODEL_!num!_OPT_!local_quality_choice!_INSTALL=1"
-            )
-        )
-    )
 )
+
 echo %GREEN%Model selection complete.%RESET%
 timeout /t 1 >nul
 goto :eof
