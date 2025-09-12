@@ -4,9 +4,11 @@ _NOTE: I have no relation or connection to the ComfyUI team. This is a personal 
 
 This installer aims to allow the installation of ComfyUI for NVIDIA on Windows (including Sage Attention, Triton Windows, xFormers) and all the accelerations enabled out of the box. It supports installing commonly used nodes, as well as multiple levels of quality of all the best models available today.
 
+UPDATE: Updates to support different video cards or operating systems have been considered, but limited time for now so I targetted the most likely scenario. Let me know in the discussions what your thoughts are!
+
 **It currently supports: SD1.5, SDXL, SD3.5, HiDream, Flux Dev, Flux Schnell, Flux Kontext, Qwen Image, Qwen Image Edit, WAN 2.1/2.2 (Including FusionX and Vace)** and it attempts to let you choose your VRAM levels to install the appropriate models for the best quality for your hardware. It also installs all related models one would need for a variety of tasks. It leverages Huggingface to download all of the models, and github to download all of the nodes.
 
-My nodes and workflows are also automatically included from these projects:
+My nodes and workflows (WIP) are also automatically included from these projects:
 
 https://github.com/Draek2077/comfyui-draekz-nodez
 
