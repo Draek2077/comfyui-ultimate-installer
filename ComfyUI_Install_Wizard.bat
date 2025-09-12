@@ -8,7 +8,7 @@ setlocal enabledelayedexpansion
 :: a portable ComfyUI instance, including custom nodes, models, and performance
 :: enhancements like Triton and Sage Attention.
 ::
-:: Version: 2.9.7 (Auto Verification)
+:: Version: 3.0.0 (Size Estimation Update)
 :: =============================================================================
 
 :: -----------------------------------------------------------------------------
@@ -37,6 +37,11 @@ set "STATUS_TRITON=0"
 set "STATUS_LIBS=0"
 set "SELECTED_QUALITY_NAME=None"
 
+:: --- Size Calculation Variables ---
+set "SIZE_COMFYUI_GB=6.5"
+set "SIZE_MODELS_GB=0.0"
+set "SIZE_TOTAL_GB=6.5"
+
 :: --- Model Selection Flags ---
 for /l %%G in (1,1,99) do (
     set "num=0%%G" & set "num=!num:~-2!"
@@ -44,8 +49,8 @@ for /l %%G in (1,1,99) do (
 )
 
 :: --- Toggles Options ---
-set "INSTALL_SERVER_MANAGER=0" :: Set to 1 to install, 0 to skip
-set "INSTALL_CLIENT_WRAPPER=0" :: Set to 1 to install, 0 to skip
+set "INSTALL_SERVER_MANAGER=1" :: Set to 1 to install, 0 to skip
+set "INSTALL_CLIENT_WRAPPER=1" :: Set to 1 to install, 0 to skip
 
 :: --- Core Configuration ---
 set "COMFYUI_DIR=ComfyUI_windows_portable"
@@ -259,7 +264,7 @@ set "NODE_URL_35=https://github.com/Zehong-Ma/ComfyUI-MagCache.git"
 set "NODE_URL_36=https://github.com/Fannovel16/ComfyUI-Frame-Interpolation.git"
 set "NODE_URL_37=https://github.com/mit-han-lab/ComfyUI-nunchaku.git"
 set "NODE_URL_38=https://github.com/ChenDarYen/ComfyUI-NAG.git"
-set "NODE_URL_39=https://github.com/Draek2077/comfyui-draekz-nodes.git"
+set "NODE_URL_39=https://github.com/Draek2077/comfyui-draekz-nodez.git"
 set "NODE_URL_40=https://github.com/crystian/ComfyUI-Crystools.git"
 set "NODE_URL_41=https://github.com/sipherxyz/comfyui-art-venture.git"
 set "NODE_URL_42=https://github.com/digitaljohn/comfyui-propost.git"
@@ -320,15 +325,15 @@ echo %BLUE%=====================================================================
 echo.
 echo %YELLOW%[ Main Actions ]%RESET%
 echo %WHITE%  S^) Select Models ^& Quality %PURPLE%!MODEL_SELECTION_STATUS!%RESET%
-echo %WHITE%  I^) Install Everything ^(based on selection^)%RESET%
+echo %WHITE%  I^) Install Everything ^(Approx. %PURPLE%!SIZE_TOTAL_GB! GB%RESET%^)%RESET%
 echo %WHITE%  V^) Verify Installation ^(updates status checks below^)%RESET%
 echo.
 echo %YELLOW%[ Installation Status ^& Manual Steps ]%RESET%
-echo %WHITE%  1^) !CHECK_COMFYUI! Install ComfyUI%RESET%
-echo %WHITE%  2^) !CHECK_MODELS! Install Selected Models%RESET%
+echo %WHITE%  1^) !CHECK_COMFYUI! Install ComfyUI ^(Approx. %PURPLE%!SIZE_COMFYUI_GB! GB%RESET%^)%RESET%
+echo %WHITE%  2^) !CHECK_MODELS! Install Selected Models ^(Approx. %PURPLE%!SIZE_MODELS_GB! GB%RESET%^)%RESET%
 echo %WHITE%  3^) !CHECK_NODES! Install Custom Nodes%RESET%
 echo %WHITE%  4^) !CHECK_TRITON! Install Triton ^& Sage Attention%RESET%
-echo %WHITE%  5^) !CHECK_LIBS! Install Python Include/Libs%RESET%
+echo %WHITE%  5^) !CHECK_LIBS! Install Python Include Libs%RESET%
 echo.
 echo %YELLOW%[ Optional Tools ^& Diagnostics ]%RESET%
 if "!INSTALL_SERVER_MANAGER!"=="1" (
@@ -355,11 +360,11 @@ if /i "%main_choice%"=="s" goto :model_selection_entry
 if /i "%main_choice%"=="i" goto :full_install
 if "%main_choice%"=="6" goto :toggle_server_manager
 if "%main_choice%"=="7" goto :toggle_client_wrapper
-if "%main_choice%"=="1" goto :install_comfyui
-if "%main_choice%"=="2" goto :install_models
-if "%main_choice%"=="3" goto :install_nodes
-if "%main_choice%"=="4" goto :install_triton_sage
-if "%main_choice%"=="5" goto :setup_python_libs
+if "%main_choice%"=="1" goto :install_comfyui_standalone
+if "%main_choice%"=="2" goto :install_models_standalone
+if "%main_choice%"=="3" goto :install_nodes_standalone
+if "%main_choice%"=="4" goto :install_triton_sage_standalone
+if "%main_choice%"=="5" goto :setup_python_libs_standalone
 if /i "%main_choice%"=="v" goto :verify_all
 if /i "%main_choice%"=="y" goto :verify_prereqs_menu
 if /i "%main_choice%"=="x" goto :exit_script
@@ -371,6 +376,27 @@ goto :main_menu
 :: -----------------------------------------------------------------------------
 :: Section 3: Core Logic and Subroutines
 :: -----------------------------------------------------------------------------
+
+:: --- Standalone wrappers for menu options ---
+:install_comfyui_standalone
+call :install_comfyui
+goto :main_menu
+
+:install_models_standalone
+call :install_models
+goto :main_menu
+
+:install_nodes_standalone
+call :install_nodes
+goto :main_menu
+
+:install_triton_sage_standalone
+call :install_triton_sage
+goto :main_menu
+
+:setup_python_libs_standalone
+call :setup_python_libs
+goto :main_menu
 
 :: --- Toggle Server Manager ---
 :toggle_server_manager
@@ -548,6 +574,7 @@ if defined is_valid (
     if "%quality_choice%"=="6" set "SELECTED_QUALITY_NAME=Full SafeTensors"
 
     call :set_models_by_quality %quality_choice%
+    call :calculate_total_size
     echo.
     echo %YELLOW%Selections set. Automatically running verification...%RESET%
     timeout /t 2 >nul
@@ -662,7 +689,7 @@ if exist "%COMFYUI_DIR%\run_nvidia_gpu.bat" (
     set "COMFYUI_ALREADY_EXISTS=1"
     set "LAST_ACTION_MSG=%GREEN%ComfyUI was already installed.%RESET%"
     set "STATUS_COMFYUI=1"
-    goto :main_menu_return
+    goto :eof
 )
 echo %YELLOW%Downloading ComfyUI v%COMFY_VER%...%RESET%
 call :grab "ComfyUI_portable.7z" "%COMFY_RELEASE_URL%"
@@ -674,8 +701,7 @@ if %errorlevel% neq 0 (
 )
 echo.
 echo %YELLOW%Extracting ComfyUI...%RESET%
-"%SEVEN_ZIP_PATH%" x "ComfyUI_portable.7z" -aoa -o"%CD%" >nul
-del "ComfyUI_portable.7z"
+"%SEVEN_ZIP_PATH%" x "ComfyUI_portable.7z" -aoa -o"%CD%" -bsp1
 if not exist "%COMFYUI_DIR%" (
     echo %RED%Extraction failed. Aborting.%RESET%
     set "LAST_ACTION_MSG=%RED%ComfyUI extraction failed.%RESET%"
@@ -689,7 +715,7 @@ call :install_server_manager
 call :install_client_wrapper
 set "LAST_ACTION_MSG=%GREEN%ComfyUI Core installed successfully.%RESET%"
 set "STATUS_COMFYUI=1"
-goto :main_menu_return
+goto :eof
 
 :configure_comfyui
 :: Define the full output file path and a temporary file for decoding
@@ -756,7 +782,7 @@ if "%INSTALL_CLIENT_WRAPPER%"=="0" (
 echo %GREEN%ComfyUI configuration complete!%RESET%
 echo.
 set "LAST_ACTION_MSG=%GREEN%ComfyUI configuration complete!%RESET%
-goto :main_menu_return
+goto :eof
 
 :: --- Install Server Manager ---
 :install_server_manager
@@ -887,7 +913,7 @@ if not exist "%CUSTOM_NODES_DIR%" (
     echo %RED%Custom nodes directory not found. Is ComfyUI installed?%RESET%
     set "LAST_ACTION_MSG=%RED%Could not install nodes: ComfyUI not found.%RESET%"
     pause
-    goto :main_menu
+    goto :eof
 )
 pushd "%CUSTOM_NODES_DIR%"
 
@@ -909,7 +935,7 @@ echo %GREEN%Custom node installation process complete.%RESET%
 echo.
 set "LAST_ACTION_MSG=%GREEN%Custom Nodes installation process finished.%RESET%"
 set "STATUS_NODES=1"
-goto :main_menu_return
+goto :eof
 
 :: --- Model Installation Logic ---
 :install_models
@@ -927,11 +953,11 @@ if "!models_were_selected!"=="false" (
     echo %PURPLE%No models selected. Please use Option 'S' from the main menu to select models and quality first.%RESET%
     set "LAST_ACTION_MSG=%PURPLE%Model installation skipped: No models or quality were selected.%RESET%"
     pause
-    goto :main_menu
+    goto :eof
 )
 call :download_selected_models
 call :silent_verify_all
-goto :main_menu_return
+goto :eof
 
 :download_selected_models
 echo.
@@ -1176,7 +1202,7 @@ if not exist "%PYTHON_EXE%" (
     echo %RED%ComfyUI not found. Please run Core Install first.%RESET%
     set "LAST_ACTION_MSG=%RED%Triton/Sage install failed: ComfyUI not found.%RESET%"
     pause
-    goto :main_menu
+    goto :eof
 )
 echo %YELLOW%Checking for Visual C++ Redistributable...%RESET%
 reg query "HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" /v Version >nul 2>&1
@@ -1191,7 +1217,7 @@ if %errorlevel% neq 0 (
     echo %RED%Triton installation failed. Please ensure VC++ Redistributable is installed.%RESET%
     set "LAST_ACTION_MSG=%RED%Triton installation failed.%RESET%"
     pause
-    goto :main_menu_return
+    goto :eof
 )
 echo %YELLOW%Installing Sage Attention...%RESET%
 "%PYTHON_EXE%" -m pip install -U https://github.com/woct0rdho/SageAttention/releases/download/v2.2.0-windows.post2/sageattention-2.2.0+cu128torch2.8.0.post2-cp39-abi3-win_amd64.whl
@@ -1199,7 +1225,7 @@ if %errorlevel% neq 0 (
     echo %RED%Sage Attention installation failed.%RESET%
     set "LAST_ACTION_MSG=%RED%Sage Attention installation failed.%RESET%"
     pause
-    goto :main_menu_return
+    goto :eof
 )
 echo %GREEN%Triton and Sage Attention installed successfully.%RESET%
 echo.
@@ -1208,37 +1234,37 @@ call :update_run_scripts
 echo.
 set "LAST_ACTION_MSG=%GREEN%Triton and Sage Attention installed and enabled.%RESET%"
 set "STATUS_TRITON=1"
-goto :main_menu_return
+goto :eof
 
 
 :: --- Python Libs/Includes Setup ---
 :setup_python_libs
 echo.
 echo %BLUE%======================================================================%RESET%
-echo %BLUE%                  Setting up Python Include/Libs                      %RESET%
+echo %BLUE%                  Setting up Python Include Libs                      %RESET%
 echo %BLUE%======================================================================%RESET%
 echo.
 if not exist "%COMFYUI_DIR%" (
     echo %RED%ComfyUI not found. Please run Core Install first.%RESET%
     set "LAST_ACTION_MSG=%RED%Python Libs setup failed: ComfyUI not found.%RESET%"
     pause
-    goto :main_menu
+    goto :eof
 )
 pushd "%COMFYUI_DIR%"
 echo %YELLOW%Downloading include and libs folders...%RESET%
 powershell -Command "Invoke-WebRequest -Uri 'https://github.com/woct0rdho/triton-windows/releases/download/v3.0.0-windows.post1/python_3.12.7_include_libs.zip' -OutFile 'libs_include.zip'; Expand-Archive -Path 'libs_include.zip' -DestinationPath 'python_embeded' -Force; Remove-Item 'libs_include.zip'"
 if exist "python_embeded\libs" if exist "python_embeded\include" (
     echo %GREEN%Successfully installed include and libs folders.%RESET%
-    set "LAST_ACTION_MSG=%GREEN%Python include/libs folders installed successfully.%RESET%"
+    set "LAST_ACTION_MSG=%GREEN%Python include libs folders installed successfully.%RESET%"
     set "STATUS_LIBS=1"
 ) else (
     echo %RED%Failed to download or extract folders. Please do it manually.%RESET%
-    set "LAST_ACTION_MSG=%RED%Failed to install Python include/libs folders.%RESET%"
+    set "LAST_ACTION_MSG=%RED%Failed to install Python include libs folders.%RESET%"
     set "STATUS_LIBS=0"
 )
 popd
 echo.
-goto :main_menu_return
+goto :eof
 
 
 :: --- Update Run Scripts ---
@@ -1310,6 +1336,7 @@ call :verify_nodes
 call :verify_models
 call :verify_python_packages
 call :verify_run_scripts
+call :calculate_total_size
 echo.
 echo %GREEN%======================================================================%RESET%
 echo %GREEN%                       Verification Complete                          %RESET%
@@ -1467,11 +1494,6 @@ if !errorlevel! equ 0 (
 echo.
 goto :eof
 
-:: --- Menu Return Helper ---
-:main_menu_return
-goto :main_menu
-
-
 :: -----------------------------------------------------------------------------
 :: Section 4: Helper Functions
 :: -----------------------------------------------------------------------------
@@ -1598,7 +1620,189 @@ del "%DEST_PATH%" 2>nul
 exit /b 1
 
 :: -----------------------------------------------------------------------------
-:: Section 5: Exit
+:: Section 5: Size Calculation
+:: -----------------------------------------------------------------------------
+
+:calculate_total_size
+cls
+echo.
+echo %BLUE%======================================================================%RESET%
+echo %BLUE%             Calculating Approximate Total Download Size              %RESET%
+echo %BLUE%======================================================================%RESET%
+echo.
+echo %YELLOW%This may take a moment. Fetching file sizes from the web...%RESET%
+
+set "URL_LIST_FILE=%TEMP%\comfy_url_list.txt"
+if exist "%URL_LIST_FILE%" del "%URL_LIST_FILE%" >nul 2>&1
+
+:: --- Add Selected Models to URL list ---
+for /l %%G in (1,1,99) do (
+    set "num=0%%G" & set "num=!num:~-2!"
+    if defined MODEL_!num!_NAME (
+        for /l %%I in (1,1,9) do (
+            if defined MODEL_!num!_OPT_%%I_INSTALL (
+                call set "URL=%%MODEL_!num!_OPT_%%I_URL%%"
+                echo !URL!>>"%URL_LIST_FILE%"
+            )
+        )
+    )
+)
+
+:: --- Add Shared Models to URL list ---
+call :add_shared_urls_to_list
+
+:: --- Calculate model size using a temporary PowerShell script for robustness ---
+set "SIZE_MODELS_GB=0.0"
+set "PS_SCRIPT_MODELS=%TEMP%\get_model_size.ps1"
+
+:: Write the PowerShell script line-by-line to avoid batch parser issues
+echo try { > "!PS_SCRIPT_MODELS!"
+echo     $totalBytes = 0; >> "!PS_SCRIPT_MODELS!"
+echo     $urlFile = '!URL_LIST_FILE!'; >> "!PS_SCRIPT_MODELS!"
+echo     if (Test-Path -LiteralPath $urlFile) { >> "!PS_SCRIPT_MODELS!"
+echo         Get-Content -LiteralPath $urlFile ^| ForEach-Object { >> "!PS_SCRIPT_MODELS!"
+echo             try { >> "!PS_SCRIPT_MODELS!"
+echo                 $response = Invoke-WebRequest -Uri $_ -Method Head -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop; >> "!PS_SCRIPT_MODELS!"
+echo                 if ($response.Headers.ContainsKey('Content-Length') -and $response.Headers['Content-Length']) { >> "!PS_SCRIPT_MODELS!"
+echo                     $totalBytes += [long]$response.Headers['Content-Length']; >> "!PS_SCRIPT_MODELS!"
+echo                 } >> "!PS_SCRIPT_MODELS!"
+echo             } catch {} >> "!PS_SCRIPT_MODELS!"
+echo         } >> "!PS_SCRIPT_MODELS!"
+echo     } >> "!PS_SCRIPT_MODELS!"
+echo     $result = [Math]::Round($totalBytes / 1GB, 1); >> "!PS_SCRIPT_MODELS!"
+echo     Write-Output $result.ToString([System.Globalization.CultureInfo]::InvariantCulture); >> "!PS_SCRIPT_MODELS!"
+echo } catch { >> "!PS_SCRIPT_MODELS!"
+echo     Write-Output '0.0'; >> "!PS_SCRIPT_MODELS!"
+echo } >> "!PS_SCRIPT_MODELS!"
+
+for /f "delims=" %%s in ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "!PS_SCRIPT_MODELS!"') do set "SIZE_MODELS_GB=%%s"
+if exist "!PS_SCRIPT_MODELS!" del "!PS_SCRIPT_MODELS!" >nul 2>&1
+
+:: --- Calculate total size using the same robust method ---
+set "SIZE_TOTAL_GB=%SIZE_COMFYUI_GB%"
+set "PS_SCRIPT_TOTAL=%TEMP%\get_total_size.ps1"
+
+echo try { > "!PS_SCRIPT_TOTAL!"
+echo     $sizeModels = [double]::Parse('!SIZE_MODELS_GB!', [System.Globalization.CultureInfo]::InvariantCulture); >> "!PS_SCRIPT_TOTAL!"
+echo     $sizeComfy = [double]::Parse('%SIZE_COMFYUI_GB%', [System.Globalization.CultureInfo]::InvariantCulture); >> "!PS_SCRIPT_TOTAL!"
+echo     $total = $sizeComfy + $sizeModels; >> "!PS_SCRIPT_TOTAL!"
+echo     Write-Output ([Math]::Round($total, 1).ToString([System.Globalization.CultureInfo]::InvariantCulture)); >> "!PS_SCRIPT_TOTAL!"
+echo } catch { >> "!PS_SCRIPT_TOTAL!"
+echo     Write-Output '!SIZE_COMFYUI_GB!'; >> "!PS_SCRIPT_TOTAL!"
+echo } >> "!PS_SCRIPT_TOTAL!"
+
+for /f "delims=" %%t in ('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "!PS_SCRIPT_TOTAL!"') do set "SIZE_TOTAL_GB=%%t"
+if exist "!PS_SCRIPT_TOTAL!" del "!PS_SCRIPT_TOTAL!" >nul 2>&1
+
+if exist "%URL_LIST_FILE%" del "%URL_LIST_FILE%" >nul 2>&1
+echo %GREEN%Size calculation complete.%RESET%
+timeout /t 1 >nul
+goto :eof
+
+:add_shared_urls_to_list
+:: This subroutine adds all conditionally downloaded shared model URLs to the list for size calculation.
+if defined FLAG_FLUX_SELECTED (
+    echo %HF_FLX_URL%/svdq-fp4_r32-flux.1-kontext-dev.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/svdq-int4_r32-flux.1-kontext-dev.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/umt5-xxl-encoder-Q5_K_S.gguf?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/t5xxl_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/t5xxl_fp8_e4m3fn.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/t5xxl_fp8_e4m3fn_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/guozinan/PuLID/resolve/main/pulid_flux_v0.9.1.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Shakker-LabsFLUX1-dev-ControlNet-Union-Pro.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Shakker-Labs/FLUX.1-dev-ControlNet-Depth/resolve/main/diffusion_pytorch_model.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/XLabs-AI/flux-ip-adapter-v2/resolve/main/ip_adapter.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/XLabs-AI/flux-controlnet-canny-v3/resolve/main/flux-canny-controlnet-v3.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/XLabs-AI/flux-controlnet-depth-v3/resolve/main/flux-depth-controlnet-v3.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/XLabs-AI/flux-controlnet-hed-v3/resolve/main/flux-hed-controlnet-v3.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/openai/clip-vit-large-patch14/resolve/main/model.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Runware/FLUX.1-Redux-dev/resolve/main/flux1-redux-dev.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taef1_decoder.pth>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taef1_encoder.pth>>"%URL_LIST_FILE%"
+)
+if defined FLAG_QWEN_SELECTED (
+    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_S.gguf?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q4_K_XL.gguf?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q5_K_S.gguf?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-UD-Q8_0.gguf?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Qwen2.5-VL-7B-Instruct-mmproj-BF16.gguf?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/resolve/main/split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/qwen_image_vae.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-8steps-V1.0.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/lightx2v/Qwen-Image-Lightning/resolve/main/Qwen-Image-Lightning-4steps-V1.0.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Qwen-Image-DiffSynth-ControlNets/resolve/main/split_files/loras/qwen_image_union_diffsynth_lora.safetensors?download=true>>"%URL_LIST_FILE%"
+)
+if defined FLAG_HIDREAM_SELECTED (
+    echo %HF_FLX_URL%/clip_g_hidream.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/clip_l_hidream.safetensors?download=true>>"%URL_LIST_FILE%"
+)
+if defined FLAG_SD15_SELECTED (
+    echo https://github.com/madebyollin/taesd/raw/main/taesd_decoder.pth>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taesd_encoder.pth>>"%URL_LIST_FILE%"
+)
+if defined FLAG_SD3_SELECTED (
+    echo https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_g.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/stable-diffusion-3.5-fp8/resolve/main/text_encoders/clip_l.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://civitai.com/api/download/models/985137?type=Model^&format=SafeTensor>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taesd3_decoder.pth>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taesd3_encoder.pth>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_depth.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_canny.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/stabilityai/stable-diffusion-3.5-controlnets/resolve/main/sd3.5_large_controlnet_blur.safetensors?download=true>>"%URL_LIST_FILE%"
+)
+if defined FLAG_SDXL_SELECTED (
+    echo https://huggingface.co/stabilityai/sdxl-vae/resolve/main/sdxl_vae.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0_0.9vae.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/xinsir/controlnet-union-sdxl-1.0/resolve/main/diffusion_pytorch_model_promax.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_full.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/thibaud_xl_openpose.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taesdxl_decoder.pth>>"%URL_LIST_FILE%"
+    echo https://github.com/madebyollin/taesd/raw/main/taesdxl_encoder.pth>>"%URL_LIST_FILE%"
+)
+if defined FLAG_WAN21_SELECTED (
+    echo %HF_FLX_URL%/wan_2.1_vae.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Wan2.1_T2V_14B_FusionX_LoRA.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Wan21_T2V_14B_lightx2v_cfg_step_distill_lora_rank32.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/ae.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/clip_vision/clip_vision_h.safetensors?download=true>>"%URL_LIST_FILE%"
+)
+if defined FLAG_WAN22_SELECTED (
+    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan2.2_vae.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_LOW_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Wan2.2-Lightning_T2V-v1.1-A14B-4steps-lora_HIGH_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_high_noise.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_t2v_lightx2v_4steps_lora_v1.1_low_noise.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_LOW_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo %HF_FLX_URL%/Wan2.2-Lightning_I2V-A14B-4steps-lora_HIGH_fp16.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_high_noise.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/loras/wan2.2_i2v_lightx2v_4steps_lora_v1_low_noise.safetensors?download=true>>"%URL_LIST_FILE%"
+    echo https://huggingface.co/Comfy-Org/Wan_2.1_ComfyUI_repackaged/resolve/main/split_files/text_encoders/umt5_xxl_fp8_e4m3fn_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
+)
+:: Always-downloaded models
+echo %HF_FLX_URL%/4x-ClearRealityV1.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x-UltraSharp.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/Afizi/ESRGAN_4x.pth/resolve/main/ESRGAN_4x.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x4.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x8.pth?download=true>>"%URL_LIST_FILE%"
+echo %HF_FLX_URL%/RealESRGAN_x4plus_anime_6B.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Siax_200k.pth>>"%URL_LIST_FILE%"
+echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_foolhardy_Remacri.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4x_NMKD-Superscale-SP_178000_G.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/uwg/upscaler/resolve/main/ESRGAN/4xNomos8kDAT.pth?download=true>>"%URL_LIST_FILE%"
+echo %HF_FLX_URL%/sam_vit_b_01ec64.pth?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/hand_yolov8s.pt?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/bbox/face_yolov8m.pt?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/xingren23/comfyflow-models/resolve/976de8449674de379b02c144d0b3cfa2b61482f2/ultralytics/segm/person_yolov8m-seg.pt?download=true>>"%URL_LIST_FILE%"
+echo %HF_FLX_URL%/llama_3.1_8b_instruct_fp8_scaled.safetensors?download=true>>"%URL_LIST_FILE%"
+echo %HF_FLX_URL%/sigclip_vision_patch14_384.safetensors?download=true>>"%URL_LIST_FILE%"
+echo %HF_FLX_URL%/ViT-L-14-TEXT-detail-improved-hiT-GmP-TE-only-HF.safetensors?download=true>>"%URL_LIST_FILE%"
+echo https://huggingface.co/NousResearch/Hermes-3-Llama-3.1-8B-GGUF/resolve/main/Hermes-3-Llama-3.1-8B.Q8_0.gguf?download=true>>"%URL_LIST_FILE%"
+goto :eof
+
+:: -----------------------------------------------------------------------------
+:: Section 6: Exit
 :: -----------------------------------------------------------------------------
 :exit_script
 cls
@@ -1609,3 +1813,40 @@ echo %BLUE%=====================================================================
 echo.
 timeout /t 2 >nul
 exit
+
+:: =============================================================================
+:: Embedded PowerShell Scripts for Size Calculation
+:: Do not execute this section directly. It is read by the :calculate_total_size subroutine.
+:: =============================================================================
+
+::PSM1 - Model Size Script starts here
+::PSM1 try {
+::PSM1     $totalBytes = 0
+::PSM1     $urlFile = '%URL_LIST_FILE%'
+::PSM1     if (Test-Path -LiteralPath $urlFile) {
+::PSM1         Get-Content -LiteralPath $urlFile | ForEach-Object {
+::PSM1             try {
+::PSM1                 $response = Invoke-WebRequest -Uri $_ -Method Head -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop
+::PSM1                 if ($response.Headers.ContainsKey('Content-Length') -and $response.Headers['Content-Length']) {
+::PSM1                     $totalBytes += [long]$response.Headers['Content-Length']
+::PSM1                 }
+::PSM1             } catch {}
+::PSM1         }
+::PSM1     }
+::PSM1     $result = [Math]::Round($totalBytes / 1GB, 1)
+::PSM1     Write-Output $result.ToString([System.Globalization.CultureInfo]::InvariantCulture)
+::PSM1 } catch {
+::PSM1     Write-Output '0.0'
+::PSM1 }
+::PSM1 - Model Size Script ends here
+
+::PST1 - Total Size Script starts here
+::PST1 try {
+::PST1     $sizeModels = [double]::Parse('__SIZE_MODELS_GB__', [System.Globalization.CultureInfo]::InvariantCulture)
+::PST1     $sizeComfy = [double]::Parse('__SIZE_COMFYUI_GB__', [System.Globalization.CultureInfo]::InvariantCulture)
+::PST1     $total = $sizeComfy + $sizeModels
+::PST1     Write-Output ([Math]::Round($total, 1).ToString([System.Globalization.CultureInfo]::InvariantCulture))
+::PST1 } catch {
+::PST1     Write-Output '__SIZE_COMFYUI_GB__'
+::PST1 }
+::PST1 - Total Size Script ends here
