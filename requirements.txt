@@ -1,0 +1,6 @@
+# Runtime dependencies
+textual>=0.80.0
+rich>=13.0.0       # pulled in by textual, listed explicitly for clarity
+
+# Build / distribution (not required at runtime)
+# pyinstaller>=6.0.0

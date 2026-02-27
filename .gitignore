@@ -1,3 +1,12 @@
 ComfyUI_portable.7z
 ComfyUI_windows_portable
 .idea
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+dist/
+*.egg-info/
+.venv/
+venv/
