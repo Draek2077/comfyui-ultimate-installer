@@ -26,7 +26,7 @@ https://github.com/Draek2077/comfyui-client-wrapper
 
 Once the base ComfyUI installation is complete, you can re-use the installer to add models easily without having to re-download or re-install parts that were already installed before.
 
-The project was written entirely using Gemini 2.5 Pro.
+The project was written entirely using Claude Code.
 
 _If you are interested in ComfyUI please visit:_
 
